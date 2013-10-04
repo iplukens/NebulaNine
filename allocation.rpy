@@ -26,36 +26,66 @@ screen allocation_image:
                 hover "a_scout.png"
                 xpos 33
                 ypos 245
+            imagebutton:
+                idle "d_scout_ship.png"
+                hover "d_scout_ship.png"
+                xpos 225
+                ypos 150
         if aUnitType == "fighter":
             imagebutton:
                 idle "a_fighter.png"
                 hover "a_fighter.png"
                 xpos 33
                 ypos 91
+            imagebutton:
+                idle "d_fighter.png"
+                hover "d_fighter.png"
+                xpos 225
+                ypos 150
         if aUnitType == "command":
             imagebutton:
                 idle "a_command.png"
                 hover "a_command.png"
                 xpos 33
                 ypos 484
+            imagebutton:
+                idle "d_cc.png"
+                hover "d_cc.png"
+                xpos 225
+                ypos 130
         if aUnitType == "generator":
             imagebutton:
                 idle "a_row_shield.png"
                 hover "a_row_shield.png"
                 xpos 33
                 ypos 166
+            imagebutton:
+                idle "d_row_shield_ship.png"
+                hover "d_row_shield_ship.png"
+                xpos 225
+                ypos 150
         if aUnitType == "dgenerator":
             imagebutton:
                 idle "a_shield.png"
                 hover "a_shield.png"
                 xpos 33
-                ypos 325        
+                ypos 325     
+            imagebutton:
+                idle "d_shield_ship.png"
+                hover "d_shield_ship.png"
+                xpos 225
+                ypos 150
         if aUnitType == "emp":
             imagebutton:
                 idle "a_emp.png"
                 hover "a_emp.png"
                 xpos 33
                 ypos 403
+            imagebutton:
+                idle "d_emp_ship.png"
+                hover "d_emp_ship.png"
+                xpos 225
+                ypos 150
                 
         hotspot (580,10,160,35) action Return("confirm")
         hotspot (750,10,35, 35) action Return("help")
@@ -322,7 +352,7 @@ screen allocation_image:
 
 
 label allocationRoutine:
-    play music "battle.mp3"
+    
     $aAllocation = True
     $aUnitCount = 0
     $aUnitType = "fighter"

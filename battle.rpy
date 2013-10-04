@@ -14,6 +14,7 @@ label battle_routine:
         if unit_queue[0].owner == mPlayer:
             call player_battle
         else:
+            pause (1.0)
             call ai_battle
         $unit_queue[0].initiative += unit_queue[0].type.speed
         call update_battle

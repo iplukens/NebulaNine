@@ -97,6 +97,7 @@ label start:
     call saveInit
     #tutorial shit goes here
     $gameOn = True
+    call tutorial
     while(gameOn):
         $playerTurn = True
         $action_available = True
@@ -177,9 +178,7 @@ label start:
         call cpuActions     
     
 label potentialEvents:
-    ###check various flags to display something at the start of a turn
-    if turnCount == 1:
-        call tutorial
+    ###check various flags to display something at the start of a turn        
     return
 
 screen map_image:
@@ -237,6 +236,11 @@ label incomeStep:
     $shipUntrainedCount += recruitUntrainedCount
     ####Deployed count the player has used this turn
     call deployed_equals_zero
+    scene bg d_cc
+    call dcl("neutral")
+    show gaius neutral at right
+    G "[capital_title], it has now been [turnCount] cycles since the [l_title] has fallen ill.  [recruitUntrainedCount] untrained troops have joined your cause."
+    G "We await your commands."
     return
 
 label deployed_equals_zero:
@@ -266,7 +270,7 @@ label cpuActions:
             $num = renpy.random.randint(0, 1)
             if num > 0.25:
                 window hide None
-                scene gb_nebula
+                scene bg space_nebula
                 hide AH
                 call add_stars
                 play sound "alert.mp3"
@@ -291,7 +295,7 @@ label cpuActions:
             $num = renpy.random.randint(0, 1)
             if num > 0.25:
                 window hide None
-                scene bg gb_nebula
+                scene bg space_nebula
                 call add_stars
                 play sound "alert.mp3"
                 hide RB
@@ -316,7 +320,7 @@ label cpuActions:
             $num = renpy.random.randint(0, 1)
             if num > 0.25:
                 window hide None
-                scene bg gb_nebula
+                scene bg space_nebula
                 call add_stars
                 play sound "alert.mp3"
                 hide corvida
@@ -376,10 +380,10 @@ label saveInit:
     ####Deployed count the player has used this turn
     call deployed_equals_zero
     
-    $mPlayer = Owner("d", "white", [Battalion("None",0),Battalion("None",0),Battalion("None",0),Battalion("None",0),Battalion("None",0)], "{color=#ffffff}")
+    $mPlayer = Owner("d", "white", [Battalion("scout",2),Battalion("None",0),Battalion("None",0),Battalion("None",0),Battalion("None",0)], "{color=#ffffff}")
     $mAH = Owner("m", "orange", [Battalion("scout",1),Battalion("emp",2),Battalion("fighter",3),Battalion("generator",4),Battalion("dgenerator",5)], "{color=#ffa500}")
     $mCC = Owner("n", "cyan", [Battalion("fighter",1),Battalion("None",0),Battalion("None",0),Battalion("None",0),Battalion("None",0)], "{color=#5dd5d5}")
-    $mRB = Owner("b", "green", [Battalion("figher",1),Battalion("None",1),Battalion("None",0),Battalion("None",0),Battalion("None",0)], "{color=#00ff00}")
+    $mRB = Owner("b", "green", [Battalion("fighter",1),Battalion("None",1),Battalion("None",0),Battalion("None",0),Battalion("None",0)], "{color=#00ff00}")
     $mJS = Owner("e", "red", [Battalion("dgenerator",1),Battalion("None",0),Battalion("None",0),Battalion("None",0),Battalion("None",0)], "{color=#ff0000}")
     $territories = [Territory(mPlayer, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 320, 473, [0, 1]), Territory(mPlayer, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 404, 483, [0, 1, 2]), Territory(mAH, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 468, 458, [1, 2, 3]), Territory(mAH, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 500, 391, [2, 3, 4, 5]), Territory(mAH, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 572, 404, [3, 4, 9]), Territory(mCC, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 458, 344, [3, 5, 6]), Territory(mCC, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 420, 272, [5, 6, 7, 8]), Territory(mCC, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 369, 300, [7, 8]), Territory(mCC, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 375, 229, [6, 7, 8, 13]), Territory(mRB, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 575, 340, [4, 9, 10]), Territory(mRB, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 620, 279, [9, 10, 11]), Territory(mRB, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 567, 260, [10, 11, 12]), Territory(mRB, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 587, 206, [11, 12, 15]), Territory(mJS, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 365, 178, [8, 13, 14]), Territory(mJS, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 407, 150, [13, 14, 17]), Territory(mJS, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 541, 148, [12, 15, 16]), Territory(mJS, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 504, 105, [15, 16, 17]), Territory(mJS, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 425, 83, [14, 16, 17])]
     
