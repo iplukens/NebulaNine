@@ -15,5 +15,5 @@ transform beam_animation:
 
 image dreambeam:
     contains beam_animation
-    xalign 0
-    yalign 0
+    xpos 520
+    ypos 130

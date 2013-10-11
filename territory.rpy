@@ -2,32 +2,51 @@ label territory_upgrade(territory):
     call screen territory_menu
     $result = _return
     if result != "exit":
-        show gaius neutral at right
+        if not gaius_takeover:
+            show gaius neutral at right
         $territory.setUpgraded()
     if result == "3un":
         $territory.units_per_turn.untrained_add(territory.upgrade_num.untrained)
         $recruitUntrainedCount += territory.upgrade_num.untrained
-        G "A wise decision.  I will increase the recruitment on this star."
+        if gaius_takeover:
+            "You will now recieve more untrained troops per cycle."
+        else:
+            G "A wise decision.  I will increase the recruitment on this star."
     elif result == "2s":
         $territory.units_per_turn.scout_add(territory.upgrade_num.scout)
         $recruitScoutCount += territory.upgrade_num.scout
-        G "A wise decision.  Scouting production of this territory shall go up accordingly."
+        if gaius_takeover:
+            "You will now be able to train more scouts each cycle."
+        else:
+            G "A wise decision.  Scouting production of this territory shall go up accordingly."
     elif result == "2f":
         $territory.units_per_turn.fighter_add(territory.upgrade_num.fighter)
         $recruitFighterCount += territory.upgrade_num.fighter
-        G "A wise decision.  More fighters will make our enenmies tremble."
+        if gaius_takeover:
+            "You will now be able to train more fighters each cycle."
+        else:
+            G "A wise decision.  More fighters will make our enenmies tremble."
     elif result == "1r":
         $territory.units_per_turn.generator_add(territory.upgrade_num.generator)
         $recruitGeneratorCount += territory.upgrade_num.generator
-        G "A wise decision.  I will work towards increasing the facilities for training row shield ships."
+        if gaius_takeover:
+            "You will now be able to train more row shield ships each cycle."
+        else:
+            G "A wise decision.  I will work towards increasing the facilities for training row shield ships."
     elif result == "1a":
         $territory.units_per_turn.dGenerator_add(territory.upgrade_num.dGenerator)
         $recruitDGeneratorCount += territory.upgrade_num.dGenerator
-        G "A wise decision.  I will make sure production allows for more shield ships."
+        if gaius_takeover:
+            "You will now be able to train more shield ships each cycle."
+        else:
+            G "A wise decision.  I will make sure production allows for more shield ships."
     elif result == "1e":
         $territory.units_per_turn.emp_add(territory.upgrade_num.emp)
         $recruitEMPCount += territory.upgrade_num.emp
-        G "A wise decision.  I will up the manufacture of emp devices."
+        if gaius_takeover:
+            "You will now be able to train more emps each cycle."
+        else:
+            G "A wise decision.  I will up the manufacture of emp devices."
     return
 
 screen territory_menu:

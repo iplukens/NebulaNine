@@ -76,9 +76,9 @@ label attack_routine:
     call screen draw_ships_clickable
     $position_index = _return
     $attack_them(unit_queue[0], unit_queue[find_guy(position_index)])
-    pause(1.0)
     $ renpy.play('laser.wav')
     with hpunch
+    pause(1.0)
     return
 
 label special_routine:
@@ -155,7 +155,3 @@ label battle_init:
             if (aFullArmy[i].type == "command"):
                 unit_queue.append(unit(i + 5, command, (aFullArmy[i].count + 4) * turnCount, command.initiative, mPlayer))
     return
-    
-label game_over:
-    while(True):
-        G "I am sorry, but... you have lost."

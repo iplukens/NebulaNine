@@ -12,6 +12,10 @@ init python:
             if territories[i] == territory:
                 star_name_hover = "system" + str(i-1) + "_owned_yellow.png"
                 ui.imagebutton(star_name_hover, star_name_hover, xpos=territories[i].x0, ypos=territories[i].y0)
+    def gaius_conquer():
+        for i in territories:
+            if i.owner != mPlayer:
+                i.setOwner(mG)
 
 label set_recruitment:
     $recruitUntrainedCount = 0

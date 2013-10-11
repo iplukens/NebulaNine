@@ -1,26 +1,19 @@
 image bg b_cc = "b_CC_bg.png"
 define RB = Character(_("ROBBIT"), color="#00ff00")
 
-init:
+label RB_init_values:
     $RB_relationship = 0
     $RB_findPart = 0
     $RB_eye = True
-    $RB_eye_found = True
     $RB_frog_leg = True
     $RB_webbed_foot = True
     $RB_frog_brain = True
-    image RB angry = ConditionSwitch(
-        "not RB_eye_found", "r_bust_angry.png",
-        "RB_eye_found", "r_bust_angry_eye.png",
-        )
-    image RB neutral = ConditionSwitch(
-        "not RB_eye_found", "r_bust_neutral.png",
-        "RB_eye_found", "r_bust_neutral_eye.png",
-        )
-    image RB sad = ConditionSwitch(
-        "not RB_eye_found", "r_bust_sad.png",
-        "RB_eye_found", "r_bust_sad_eye.png",
-        )
+    image RB angry = "r_bust_angry.png"
+    image RB angry eye = "r_bust_angry_eye.png"
+    image RB sad = "r_bust_sad.png"
+    image RB sad eye = "r_bust_sad_eye.png"
+    image RB neutral = "r_bust_neutral.png"
+    image RB neutral eye = "r_bust_neutral_eye.png"
     return
 
 label RB_event:
@@ -29,6 +22,7 @@ label RB_event:
     call display_character_left pass ("neutral")
     if not RB_first:
         $RB_first = True
+        call RB_init_values
         call RB_first_meeting
     else:
         call RB_progress
@@ -37,7 +31,10 @@ label RB_event:
 label RB_war:
     scene bg b_cc
     call dcl("angry")
-    show RB angry at right
+    if RB_eye:
+        show RB angry eye at right
+    else:
+        show RB angry at right
     S "You've got a few screws loose! If you won't yield, I'll have to turn you to scrap!"
     RB "Now you've got me hopping mad! I'm going to make sure you croak now!"
     hide RB angry
@@ -128,6 +125,7 @@ label RB_1Thankful:
     RB "If you happen upon my missing parts, bring them here. Maybe we can work out a deal."
     S "If that will help me save my [l_title], I guess I could try to help you out."
     RB "Thanks so much. I hop to see you again!"
+    $RBTurnsTilWar = 4
     return
     
 label RB_1Anger:
@@ -150,7 +148,7 @@ label RB_1A:
     G "If you say so, [miperson]. All the same, be on your guard."
     G "Ah, ROBBIT approaches."
     show RB neutral at right
-    RB "I had hopped to see you all again. Have you had any luck in tracking down my missing parts? It's not easy being half-blind and green…"
+    RB "I had hopped to see you all again. Have you had any luck in tracking down my missing parts? It's not easy being half-blind and green."
     menu:
         "We found a robotic eye!" if RB_eye:
             call RB_1A_Success
@@ -161,7 +159,6 @@ label RB_1A:
 label RB_1A_Success:
     S "Yes, we recently discovered this robotic eye."
     RB "Oh thank you! Ribbit. I'll take that."
-    $RB_eye = False
     scene black
     with Dissolve(0.5)
     centered "A few moments later..."
@@ -169,14 +166,14 @@ label RB_1A_Success:
     with Dissolve(0.5)
     show gaius neutral at Position(xpos = 95, xanchor=0, ypos=1.0, yanchor=500)
     call display_character_left pass ("happy")
-    show RB neutral at right
+    show RB neutral eye at right
     RB "How ribbiting! I can feel my senses coming back already."
     RB "As a show of faith, I'll divert some funds from a nearby star to give you guys a jump."
-    hide RB neutral
-    show RB angry at right
+    hide RB neutral eye
+    show RB angry eye at right
     RB "If you dare try to take advantage of this, I will be very unhoppy...BZZT"
-    hide RB angry
-    show RB sad at right
+    hide RB angry eye
+    show RB sad eye at right
     RB "Oh no. I still appear to be malfunctioning. Try to find some more pieces and hop me out?"
     S "We shall try to hop - I mean help, you out. Thank you for aiding me in my quest."
     scene black
@@ -185,6 +182,7 @@ label RB_1A_Success:
     centered "In return for your aid, ROBBIT has granted you a star system."
     $RB_relationship += 1
     $territory.setOwner(mPlayer)
+    $RBTurnsTilWar = 4
     return
     
 label RB_1A_Failure:
@@ -215,7 +213,7 @@ label RB_2A:
     G "ROBBIT appears to be on the mend. Hopefully we can continue full steam ahead."
     S "I have high hopes as well."
     G "ROBBIT is now arriving, [miperson]."
-    show RB neutral at right
+    show RB neutral eye at right
     RB "I had hopped to see you all again. Have you made any progress in the search for my missing parts? I really miss having both of my legs..."
     menu:
         "We have found a frog leg." if RB_frog_leg:
@@ -235,15 +233,15 @@ label RB_2A_Success:
     with Dissolve(0.5)
     call display_character_left pass ("neutral")
     show gaius neutral at Position(xpos = 95, xanchor=0, ypos=1.0, yanchor=500)
-    show RB neutral at right
+    show RB neutral eye at right
     RB "I know I've toad you before, but I really appreciate this."
     RB "As a show of faith, I'll divert some funds from a nearby star to give you guys a leap."
-    hide RB neutral
-    show RB angry at right
+    hide RB neutral eye
+    show RB angry eye at right
     RB "Now hang on a tadpole. I'm get the feeling you are trying to exploit my situation for your own personal gain."
     RB "You guys keep bugging me and BZZT..."
-    hide RB angry
-    show RB sad at right
+    hide RB angry eye
+    show RB sad eye at right
     RB "Please ignore that outburst. I am still incomplete."
     S "Have no fear. We will continue our search."
     scene black
@@ -252,6 +250,7 @@ label RB_2A_Success:
     centered "In return for your aid, ROBBIT has granted you a star system."
     $RB_relationship += 1
     $territory.setOwner(mPlayer)
+    $RBTurnsTilWar = 4
     return
 
 label RB_3A:
@@ -266,7 +265,7 @@ label RB_3A:
     show gaius neutral at Position(xpos = 95, xanchor=0, ypos=1.0, yanchor=500)
     call display_character_left pass ("neutral")
     G "Oh dear. Here he comes..."
-    show RB neutral at right
+    show RB neutral eye at right
     RB "Hello, my friends. I had hopped to see you all again. Have you had any luck in tracking down parts to aid me? The leg you gave me works great, but it's a bit unstable..."
     menu:
         "We have found a webbed foot." if RB_webbed_foot:
@@ -278,7 +277,6 @@ label RB_3A:
 label RB_3A_Success:
     S "Yes, we tracked down this webbed foot!"
     RB "Oh, thank you! With this I am nearly complete."
-    $RB_webbed_foot = False
     scene black
     with Dissolve(0.5)
     centered "A few moments later..."
@@ -286,7 +284,7 @@ label RB_3A_Success:
     with Dissolve(0.5)
     show gaius neutral at Position(xpos = 95, xanchor=0, ypos=1.0, yanchor=500)
     call display_character_left pass ("neutral")
-    show RB angry at right
+    show RB angry eye at right
     RB "Now you've done it! With this I can take a strike at you!"
     ### Character sliding animation should go here
     ### Possibly make the people frown here?
@@ -307,8 +305,8 @@ label RB_3A_Peace:
     $renpy.pause(0.5)
     S "ROBBIT, CALM DOWN!!!"
     RB "BZZT..."
-    hide RB angry
-    show RB sad at right
+    hide RB angry eye
+    show RB sad eye at right
     RB "What happened? I lost control for a second and..."
     S "It's alright, you appear to be in control now."
     RB "That is true, but only a moment ago I tried to strike at Gaius, and you were caught in the middle..."
@@ -322,10 +320,11 @@ label RB_3A_Peace:
     centered "In return for your aid, ROBBIT has granted you a star system."
     $RB_relationship += 1
     $territory.setOwner(mPlayer)
+    $RBTurnsTilWar = 4
     return
     
 label RB_3A_War:
-    hide RB angry
+    hide RB angry eye
     S "Gaius, you're right, let's go!"
     G "I will rally the troops. A strike against you is a strike against all of Dreamion."
     scene black
@@ -338,7 +337,7 @@ label RB_4A:
     scene bg b_cc
     call display_character_left pass ("neutral")
     S "ROBBIT, are you here?"
-    show RB neutral at right
+    show RB neutral eye at right
     RB "I had hopped to see you all again. Have you found my final part? Only my brain is missing now, and I would very much like to have it back..."
     menu:
         "Yes, I found it!" if RB_frog_brain:
@@ -350,20 +349,17 @@ label RB_4A:
 label RB_4A_Success:
     S "Yes, I found it!"
     RB "Oh, thank you! I'm so hoppy I could jump for joy."
-    S "Don't you mean \"hop\" for joy?"
-    RB "What?"
-    S "Nothing. You seem much calmer now that Gaius is missing."
+    S "You seem much calmer now that Gaius is missing."
     RB "I hadn't considered that. It might just be my new parts, you know."
-    $RB_frog_brain = False
     scene black
     with Dissolve(0.5)
     centered "A few moments later..."
     scene bg b_cc
     with Dissolve(0.5)
     call display_character_left pass ("neutral")
-    show RB neutral at right
+    show RB neutral eye at right
     RB "Ribbit Ribbit Ribbit. All systems seem to be fine."
-    S "That's ribbiting - um, i mean RIVETING news!{p}{size=-3}great, now I'M doing it‚Äö√Ñ¬∂{/size}"
+    S "That's ribbiting - I mean, RIVETING news!{p}{size=-3}great, now I'M doing it.{/size}"
     RB "My memory banks are still fuzzy. Something foul seems to be hoppening."
     RB "Perhaps you can discover what it is. I'll give you the full support of BoT to help you out."
     scene black
@@ -386,7 +382,6 @@ label RB_1A_Item:
     G "It looks like some kind of eye. What could that be doing here?"
     S "I'm not sure. Let's hold onto it, just to be safe."
     $RB_eye = True
-    $RB_eye_found = True
     return
 
 label RB_2A_Item:

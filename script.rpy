@@ -107,6 +107,7 @@ label start:
         call set_recruitment
         call recruited_zeroed
         while(playerTurn):
+            call end_game
             call set_adjacents
             window hide None
             call screen map_image
@@ -158,7 +159,7 @@ label start:
                                         elif territory.owner.name == "n":
                                             call CC_start
                                         elif territory.owner.name == "e":
-                                            call JS_first_meeting
+                                            call JS_event
                                 "Declare war!":
                                     $territory.owner.toWar()
                                     if territory.owner.name == "m":
@@ -178,7 +179,24 @@ label start:
         call cpuActions     
     
 label potentialEvents:
-    ###check various flags to display something at the start of a turn        
+    ###check various flags to display something at the start of a turn 
+    
+    
+    if RBTurnsTilWar < 0 and RBWarSeen == False and RB_relationship != 4:
+        call RB_TimeLimitWar
+        $RBWarSeen = True
+    elif RBTurnsSinceMet > 2 and RBEventOne == False:
+        call RB_1A_Item
+        $RBEventOne = True
+    elif RBTurnsSinceMet > 5 and RBEventTwo == False and RBWarSeen == False:
+        call RB_2A_Item
+        $RBEventTwo = True
+    elif RBTurnsSinceMet > 8 and RB_relationship >= 1 and RBEventThree == False and RBWarSeen == False:
+        call RB_3A_Item
+        $RBEventThree = True
+    elif RBTurnsSinceMet > 11 and RB_relationship >= 2 and terrorities[5].owner == mPlayer and RBEventFour == False and RBWarSeen == False:
+        call RB_4A_Item
+        $RBEventFour = True
     return
 
 screen map_image:
@@ -233,14 +251,23 @@ screen map_image:
 label incomeStep:
     ###updates turn stuff increase troop count, turn count whatever else
     $turnCount += 1
+    
+    
+    if RBTurnsSinceMet != -1:
+        $RBTurnsSinceMet += 1    
+        $RBTurnsTilWar -= 1
+        
     $shipUntrainedCount += recruitUntrainedCount
     ####Deployed count the player has used this turn
     call deployed_equals_zero
     scene bg d_cc
     call dcl("neutral")
-    show gaius neutral at right
-    G "[capital_title], it has now been [turnCount] cycles since the [l_title] has fallen ill.  [recruitUntrainedCount] untrained troops have joined your cause."
-    G "We await your commands."
+    if gaius_takeover:
+        "It has now been [turnCount] cycles since the [l_title] has fallen ill.  [recruitUntrainedCount] untrained troops have joined Dreamion."
+    else:
+        show gaius neutral at right
+        G "[capital_title], it has now been [turnCount] cycles since the [l_title] has fallen ill.  [recruitUntrainedCount] untrained troops have joined your cause."
+        G "We await your commands."
     return
 
 label deployed_equals_zero:
@@ -262,83 +289,143 @@ label recruited_zeroed:
 return
 
 label cpuActions:
-    if owner_is_adjacent(mAH):
-        scene bg m_cc
-        show AH neutral
-        G "The Masters of Space are acting this cycle, [miperson]"
-        if mAH.atWar:
+    if gaius_takeover:
+        scene bg e_cc
+        show gaius angry
+        "Gaius is acting this cycle."
+        $num = renpy.random.randint(0, 1)
+        if num > 0.25:
+            window hide None
+            scene bg space_nebula
+            call add_stars
+            play sound "alert.mp3"
+            hide G
+            $get_attacked_territory(mG)
+            $highlight_territory()
+            $ renpy.pause(1.0)
+            scene bg d_cc with dissolve
+            call dcl("neutral")
+            $enemy = mJS
+            "Gaius has amassed an army, and Dreamion must defend itself!"
+            call allocationRoutine
             $num = renpy.random.randint(0, 1)
-            if num > 0.25:
-                window hide None
-                scene bg space_nebula
-                hide AH
-                call add_stars
-                play sound "alert.mp3"
-                $ get_attacked_territory(mAH)
-                $ highlight_territory()
-                $ renpy.pause(1.0)
-                scene bg d_cc with dissolve
-                call dcl("neutral")
-                $enemy = mAH
-                show gaius neutral at right
-                G "[capital_title]!  We are under attack!"
-                G "The Masters of Space have amassed an army, and we must defend ourselves!"
-                S "Yes, Gaius.  I understand."
-                call allocationRoutine
-        hide AH neutral
-    call set_adjacents
-    if owner_is_adjacent(mRB):
-        scene bg b_cc
-        show RB neutral
-        G "The BoTs are acting this cycle, [miperson]"
-        if mRB.atWar:
-            $num = renpy.random.randint(0, 1)
-            if num > 0.25:
+            if num > 0.5:
                 window hide None
                 scene bg space_nebula
                 call add_stars
                 play sound "alert.mp3"
-                hide RB
-                $get_attacked_territory(mRB)
+                hide G
+                $get_attacked_territory(mG)
                 $highlight_territory()
                 $ renpy.pause(1.0)
                 scene bg d_cc with dissolve
                 call dcl("neutral")
-                $enemy = mRB
-                show gaius neutral at right
-                G "[capital_title]!  We are under attack!"
-                G "The BoTs have amassed an army, and we must defend ourselves!"
-                S "Yes, Gaius.  I understand."
+                $enemy = mJS
+                "Gaius has amassed an army, and Dreamion must defend itself!"
                 call allocationRoutine
+        hide G
+    else:
+        if owner_is_adjacent(mAH):
+            scene bg m_cc
+            show AH neutral
+            G "The Masters of Space are acting this cycle, [miperson]"
+            if mAH.atWar:
+                $num = renpy.random.randint(0, 1)
+                if num > 0.25:
+                    window hide None
+                    scene bg space_nebula
+                    hide AH
+                    call add_stars
+                    play sound "alert.mp3"
+                    $ get_attacked_territory(mAH)
+                    $ highlight_territory()
+                    $ renpy.pause(1.0)
+                    scene bg d_cc with dissolve
+                    call dcl("neutral")
+                    $enemy = mAH
+                    show gaius neutral at right
+                    G "[capital_title]!  We are under attack!"
+                    G "The Masters of Space have amassed an army, and we must defend ourselves!"
+                    S "Yes, Gaius.  I understand."
+                    call allocationRoutine
+            hide AH neutral
+        call set_adjacents
+        if owner_is_adjacent(mRB):
+            if RBTurnsSinceMet == -1:
+                $RBTurnsSinceMet = 0
+            scene bg b_cc
+            show RB neutral
+            G "The BoTs are acting this cycle, [miperson]"
+            if mRB.atWar:
+                $num = renpy.random.randint(0, 1)
+                if num > 0.25:
+                    window hide None
+                    scene bg space_nebula
+                    call add_stars
+                    play sound "alert.mp3"
+                    hide RB
+                    $get_attacked_territory(mRB)
+                    $highlight_territory()
+                    $ renpy.pause(1.0)
+                    scene bg d_cc with dissolve
+                    call dcl("neutral")
+                    $enemy = mRB
+                    show gaius neutral at right
+                    G "[capital_title]!  We are under attack!"
+                    G "The BoTs have amassed an army, and we must defend ourselves!"
+                    S "Yes, Gaius.  I understand."
+                    call allocationRoutine
             hide RB
-    call set_adjacents
-    if owner_is_adjacent(mCC):
-        scene bg n_cc
-        show corvida
-        G "The Nebulists are acting this cycle, [miperson]"
-        if mCC.atWar:
-            $num = renpy.random.randint(0, 1)
-            if num > 0.25:
-                window hide None
-                scene bg space_nebula
-                call add_stars
-                play sound "alert.mp3"
-                hide corvida
-                $get_attacked_territory(mCC)
-                $highlight_territory()
-                $ renpy.pause(1.0)
-                scene bg d_cc with dissolve
-                call dcl("neutral")
-                $enemy = mCC
-                show gaius neutral at right
-                G "[capital_title]!  We are under attack!"
-                G "The Nebulists have amassed an army, and we must defend ourselves!"
-                S "Yes, Gaius.  I understand."
-                call allocationRoutine
-        hide corvida
-    call set_adjacents
-    if owner_is_adjacent(mJS):
-        G "Estelle is acting this cycle, [miperson]"
+        call set_adjacents
+        if owner_is_adjacent(mCC):
+            scene bg n_cc
+            show corvida
+            G "The Nebulists are acting this cycle, [miperson]"
+            if mCC.atWar:
+                $num = renpy.random.randint(0, 1)
+                if num > 0.25:
+                    window hide None
+                    scene bg space_nebula
+                    call add_stars
+                    play sound "alert.mp3"
+                    hide corvida
+                    $get_attacked_territory(mCC)
+                    $highlight_territory()
+                    $ renpy.pause(1.0)
+                    scene bg d_cc with dissolve
+                    call dcl("neutral")
+                    $enemy = mCC
+                    show gaius neutral at right
+                    G "[capital_title]!  We are under attack!"
+                    G "The Nebulists have amassed an army, and we must defend ourselves!"
+                    S "Yes, Gaius.  I understand."
+                    call allocationRoutine
+            hide corvida
+        call set_adjacents
+        if owner_is_adjacent(mJS):
+            scene bg e_cc
+            show JS neutral
+            G "Estelle is acting this cycle, [miperson]"
+            if mJS.atWar:
+                $num = renpy.random.randint(0, 1)
+                if num > 0.25:
+                    window hide None
+                    scene bg space_nebula
+                    call add_stars
+                    play sound "alert.mp3"
+                    hide JS
+                    $get_attacked_territory(mJS)
+                    $highlight_territory()
+                    $ renpy.pause(1.0)
+                    scene bg d_cc with dissolve
+                    call dcl("neutral")
+                    $enemy = mJS
+                    show gaius neutral at right
+                    G "[capital_title]!  We are under attack!"
+                    G "Estelle has amassed an army, and we must defend ourselves!"
+                    S "Yes, Gaius.  I understand."
+                    call allocationRoutine
+            hide JS
     return
     
 label add_stars:
@@ -385,6 +472,9 @@ label saveInit:
     $mCC = Owner("n", "cyan", [Battalion("fighter",1),Battalion("None",0),Battalion("None",0),Battalion("None",0),Battalion("None",0)], "{color=#5dd5d5}")
     $mRB = Owner("b", "green", [Battalion("fighter",1),Battalion("None",1),Battalion("None",0),Battalion("None",0),Battalion("None",0)], "{color=#00ff00}")
     $mJS = Owner("e", "red", [Battalion("dgenerator",1),Battalion("None",0),Battalion("None",0),Battalion("None",0),Battalion("None",0)], "{color=#ff0000}")
+    $mG = Owner("e", "red", [Battalion("fighter", 10),Battalion("None",0),Battalion("None",0),Battalion("None",0),Battalion("None",0)], "{color=#ff0000}")
+    $mG.toWar()
+    
     $territories = [Territory(mPlayer, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 320, 473, [0, 1]), Territory(mPlayer, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 404, 483, [0, 1, 2]), Territory(mAH, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 468, 458, [1, 2, 3]), Territory(mAH, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 500, 391, [2, 3, 4, 5]), Territory(mAH, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 572, 404, [3, 4, 9]), Territory(mCC, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 458, 344, [3, 5, 6]), Territory(mCC, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 420, 272, [5, 6, 7, 8]), Territory(mCC, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 369, 300, [7, 8]), Territory(mCC, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 375, 229, [6, 7, 8, 13]), Territory(mRB, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 575, 340, [4, 9, 10]), Territory(mRB, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 620, 279, [9, 10, 11]), Territory(mRB, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 567, 260, [10, 11, 12]), Territory(mRB, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 587, 206, [11, 12, 15]), Territory(mJS, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 365, 178, [8, 13, 14]), Territory(mJS, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 407, 150, [13, 14, 17]), Territory(mJS, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 541, 148, [12, 15, 16]), Territory(mJS, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 504, 105, [15, 16, 17]), Territory(mJS, UPT(5, 1, 1, 1, 0, 0), UPT(5, 1, 1, 1, 0, 0), 425, 83, [14, 16, 17])]
     
     ####Init all other flags There are goin to be so many jeebus glorious spaghetti code
@@ -393,6 +483,22 @@ label saveInit:
     ### first meeting flags
     $AH_first = False
     $CC_first = False
+    
+    ###RIBBOT FLAGS
     $RB_first = False
+    $RBTurnsSinceMet = -1
+    $RBTurnsTilWar = 3
+    $RBWarSeen = False
+    $RBEventOne = False
+    $RBEventTwo = False
+    $RBEventThree = False
+    $RBEventFour = False
+    $RB_relationship = 0
+    
+    ### Gaius switch
+    $gaius_takeover = False
+    
+    $kill_count = 0
+    
     $JS_first = False
     return

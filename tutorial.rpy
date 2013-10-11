@@ -1,6 +1,8 @@
 init:
     $ c_name = "S"
     define S = DynamicCharacter("c_name", color="FFFFFF")
+    $ l_name = "L"
+    define L = DynamicCharacter("l_name", color="ff1493")
 
 label tutorial:
     scene bg d_cc

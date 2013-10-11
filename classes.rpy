@@ -1,6 +1,44 @@
 ###Define classes and other nice objects here so we can call them in the game
 init python:
     
+    class Laser(object):
+        def __init__(self, x, y, dx , function=None):
+            self.transform = Transform(child="laser.png", xanchor=0.5, yanchor=0.5, function=function)
+            self.x = x + 80
+            self.y = y + 35
+            self.dx = dx
+            self.dy = 0
+
+    def laser_update(pilot, st, at):
+        global last_time
+        # The pilot is the first ball in our list, and he's the one
+        # that gets last_time updated.
+        if last_time is None:
+            dt = 0
+        else:
+            dt = st - last_time
+
+        last_time = st
+
+        # Basic movement, and bouncing off the walls.
+        for i in lasers:
+
+            i.x += i.dx * dt
+            i.y += 0
+
+
+        # Update the transforms.
+        for i in lasers:
+
+            # This is the code that deals with Ren'Py to update the
+            # various transforms. Note that we use absolute coordinates
+            # to position ourselves with subpixel accuracy.
+            i.transform.xpos = absolute(i.x)
+            i.transform.ypos = absolute(i.y)
+            i.transform.update()
+
+        return 0
+        
     ### check if owner has an adjacent territory to the player
     def owner_is_adjacent(owner):
         for i in adjacents:
@@ -21,11 +59,11 @@ init python:
             self.defense = defense
             self.special = special
             self.name = name
-    scout = stat_list(3, 1, 5, 1, "none", "_scout_ship")
+    scout = stat_list(3, 1, 1, 1, "none", "_scout_ship")
     fighter = stat_list(5, 2, 3, 2, "none", "_fighter")
-    generator = stat_list(2, 4, 4, 5, "Shield", "_row_shield_ship")
-    dgenerator = stat_list(1, 4, 4, 5, "All-shield", "_shield_ship")
-    emp = stat_list(3, 3, 2, 4, "EMP", "_emp_ship")
+    generator = stat_list(2, 4, 2, 5, "Shield", "_row_shield_ship")
+    dgenerator = stat_list(1, 4, 2, 5, "All-shield", "_shield_ship")
+    emp = stat_list(3, 3, 4, 4, "EMP", "_emp_ship")
     command = stat_list(3, 3, 3, 3, "DREAM-BEAM", "_cc")
 
 ### BATTLE CLASSES -- SO MANY !!! ---
@@ -81,7 +119,10 @@ init python:
                     global deployedEMPCount
                     shipEMPCount -= number
                     deployedEMPCount -= number
+            else:
+                kill_count += number
             self.count -= number
+
     def remove_dead_units():
         length = len(unit_queue)
         i = 0
@@ -232,6 +273,8 @@ init python:
         return -1
             
     def dream_beam(guy):
+        ship_name = "d_cc.png"
+        ui.imagebutton(ship_name, ship_name, xpos=20, ypos=100)
         guy.count = 0
         
     def wipeShields():
@@ -273,13 +316,27 @@ init python:
             defendShips = 1 + defender.count/10
     
         ship_name =  attacker.owner.name + attacker.type.name + ".png"
+        
+        global last_time
+        last_time = None
+        global lasers
+        lasers = [Laser(0, 900, 1000, function=laser_update)]
         for i in range (0 , attackShips):
             xcoord = renpy.random.randint(0, 280)
             ycoord = renpy.random.randint(60, 300)
+            
+            if attacker.owner == mPlayer:
+                lasers.append(Laser(xAttackerOffset + xcoord, ycoord, 1000))
+            else:
+                lasers.append(Laser(xAttackerOffset + xcoord, ycoord, -1000))
+                
             ui.imagebutton(ship_name, ship_name, xpos=xAttackerOffset + xcoord, ypos=ycoord)
         ship_name =  defender.owner.name + defender.type.name + ".png"
         for i in range (0 , defendShips):
             xcoord = renpy.random.randint(0, 280)
             ycoord = renpy.random.randint(60, 300)
             ui.imagebutton(ship_name, ship_name, xpos=xDefenderOffset + xcoord, ypos=ycoord)
+            
+        for i, b in enumerate(lasers):
+            renpy.show("lasers%d" % i, what=b.transform)
         return

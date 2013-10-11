@@ -53,21 +53,22 @@ label dll(mood):
 
 ### displays the correct love interest character gender
 ### input = their mood of either happy, neutral, or sad
+### acutally it's centered... not left... whatever
 label display_love_left(mood):
     if aGender == "male":
         if mood == "happy":
-            show mlove happy at Position(xpos = 0, xanchor = 0, ypos = 1.0, yanchor = 500)
+            show mlove happy at Position(xpos = 0.5, xanchor = 0, ypos = 1.0, yanchor = 500)
         if mood == "neutral":
-            show mlove neutral at Position(xpos = 0, xanchor = 0, ypos = 1.0, yanchor = 500)
+            show mlove neutral at Position(xpos = 0.5, xanchor = 0, ypos = 1.0, yanchor = 500)
         if mood == "angry":
-            show mcharacter angry at Position(xpos = 0, xanchor = 0, ypos = 1.0, yanchor = 500)
+            show mcharacter angry at Position(xpos = 0.5, xanchor = 0, ypos = 1.0, yanchor = 500)
     else:
         if mood == "happy":
-            show flove happy at Position(xpos = 0, xanchor = 0, ypos = 1.0, yanchor = 500)
+            show flove happy at Position(xpos = 0.5, xanchor = 0, ypos = 1.0, yanchor = 500)
         if mood == "neutral":
-            show flove neutral at Position(xpos = 0, xanchor = 0, ypos = 1.0, yanchor = 500)
+            show flove neutral at Position(xpos = 0.5, xanchor = 0, ypos = 1.0, yanchor = 500)
         if mood == "angry":
-            show flove angry at Position(xpos = 0, xanchor = 0, ypos = 1.0, yanchor = 500)
+            show flove angry at Position(xpos = 0.5, xanchor = 0, ypos = 1.0, yanchor = 500)
     return
 
 ### hides the correct gender model of the character depending on input
@@ -87,4 +88,23 @@ label hide_character(mood):
             hide fcharacter neutral
         if mood == "angry":
             hide fcharacter angry
+    return
+    
+### hides the correct gender model of the love character depending on input
+### input = their mood of either happy, neutral, or sad
+label hide_lcharacter(mood):
+    if aGender == "male":
+        if mood == "happy":
+            hide mlove happy
+        if mood == "neutral":
+            hide mlove neutral
+        if mood == "angry":
+            hide mlove angry
+    else:
+        if mood == "happy":
+            hide flove happy
+        if mood == "neutral":
+            hide flove neutral
+        if mood == "angry":
+            hide flove angry
     return
