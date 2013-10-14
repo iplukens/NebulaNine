@@ -1,6 +1,10 @@
 image female = "sf_bust_neutral.png"
 image male = "sm_bust_neutral.png"
 
+image space_1 = "space_1.png"
+image space_2 = "space_2.png"
+image space_3 = "space_3.png"
+
 screen character_select:
     imagemap:
         ground "space_1.png"
@@ -19,6 +23,27 @@ screen character_select:
         imagebutton:
             idle "character_select_text.png"
             hover "character_select_text.png"
+            xpos 240
+            ypos 50
+
+screen love_select:
+    imagemap:
+        ground "space_1.png"
+        imagebutton:
+            idle "pf_bust_neutral.png"
+            hover "pf_bust_happy.png"
+            xpos 0
+            ypos 100
+            action Return("female")
+        imagebutton:
+            idle "pm_bust_neutral.png"
+            hover "pm_bust_happy.png"
+            xpos 550
+            ypos 100
+            action Return("male")
+        imagebutton:
+            idle "love_select_text.png"
+            hover "love_select_text.png"
             xpos 240
             ypos 50
 

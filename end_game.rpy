@@ -13,10 +13,80 @@ label end_game:
         else:
             call worst_ending
     if territories[0].owner != mPlayer:
+        G "The capital has fallen, [miperson]!  It's all over!  I can't believe I put my faith in you."
         call game_over
     return
+
+label check_defeated:
+    $conquered_someone = False
+    if not gaius_takeover:
+        $string = "no one"
+        if mAH.atWar and not has_territories(mAH) and not AH_conquered:
+            $conquered_someone = True
+            $string = "Masters of Space"
+            scene bg m_cc
+            call dcl("angry")
+            show AH angry at right
+            S "Any last words you pathetic Loser of Space?!"
+            AH "None.  Just get it over with."
+            S "Alright.  TASTE MY DREAM BEAM!!!"
+            $AH_conquered = True
+            play sound "longlaser.wav"
+            show eyelasersleft
+            show eyelasersright
+            pause(1.0)
+            hide eyelasersleft
+            hide eyelasersright
+            hide AH
+            pause(0.5)
+        elif mRB.atWar and not has_territories(mRB) and not RB_conquered:
+            $conquered_someone = True
+            $string = "BoTs"
+            scene bg b_cc
+            call dcl("angry")
+            if RB_eye:
+                show RB angry eye at right
+            else:
+                show RB angry at right
+            S "Anything left to say you malfunctioning amphibian?"
+            RB "Froggit about it!"
+            S "Annoying until the end.  TASTE MY DREAM BEAM!!!"
+            $RB_conquered = True
+            play sound "longlaser.wav"
+            show eyelasersleft
+            show eyelasersright
+            pause(1.0)
+            hide eyelasersleft
+            hide eyelasersright
+            hide RB
+            pause(0.5)
+        elif mCC.atWar and not has_territories(mCC) and not CC_conquered:
+            $conquered_someone = True
+            $string = "Nebulists"
+            scene bg n_cc
+            call dcl("angry")
+            show corvida angry at right
+            S "Time to make me some fried chicken!"
+            S "DREAM BEAM!!!"
+            $CC_conquered = True
+            play sound "longlaser.wav"
+            show eyelasersleft
+            show eyelasersright
+            pause(1.0)
+            hide eyelasersleft
+            hide eyelasersright
+            hide corvida
+            pause(0.5)
+        if conquered_someone:
+            scene black
+            with Dissolve(0.5)
+            centered "--- You have succesfully conquered the [string] ---"
+    return
+
+
     
 label game_over:
+    window hide None
     scene bg game_over
     with Dissolve(1.0)
     pause(8.0)
@@ -49,7 +119,12 @@ label kill_gaius:
     S "Gaius..."
     G "Sir?"
     S "TASTE MY DREAM BEAM!!!"
-    "-- chris pls add animation, kthx --"
+    play sound "longlaser.wav"
+    show eyelasersleft
+    show eyelasersright
+    pause(1.0)
+    hide eyelasersleft
+    hide eyelasersright
     hide gaius
     S "Now to attend to my love."
     call loved_betrayed
@@ -61,7 +136,7 @@ label best_ending:
     G "Really?  Thank you, [miperson].  THANK YOU!"
     G "I will be forever grateful."
     S "Say that after you've rotted in the dungeons a bit.  Friends, take him away!"
-    " -- an animation of our dudes walking up and carrying him away here would be cool, pls chris pls -- "
+    hide gaius
     S "Now to attend to my love."
     call beginning_of_the_end
     call dcl("happy")
@@ -134,17 +209,23 @@ label loved_betrayed:
     S "TAKE IT BACK!"
     L "NO!"
     S "Then... TASTE MY DREAM BEAM!  RRRRRRAAAAGGGGGHHHHHHH!!!!"
-    "--- pewpewpew dream beam pewpew ---"
+    play sound "longlaser.wav"
+    show eyelasersleft
+    show eyelasersright
+    pause(1.0)
+    hide eyelasersleft
+    hide eyelasersright
     if worstest:
         call hide_lcharacter("angry")
         show gaius happy at right
         G "And now it's my turn!"
-        "pewpewpew gaius kills hero pewpew thx chris"
+        $ double_vision_on("bg palace")
         call hide_character("angry")
         S "But... but Gaius... why?"
         G "For control of the whole Nebula of course.  Now rest your eyes and go to sleep, [miperson]."
         S "Yes, Gaius... Dreams... I will Dreamion forver..."
         G "No, [miperson].  No more dreams for you.  Only nightmares."
+        $double_vision_off()
     scene bg fin
     with fade
     centered "--- No more dreams now - only nightmares ---"
@@ -161,15 +242,21 @@ label worst_ending:
     JS "Calm down, [c_name].  Here it is."
     centered "-- Got the Space Serum! --"
     S "Alright, now for you..."
-    "--- pewpewpew DREAM BEAMED pewpew ---"
+    play sound "longlaser.wav"
+    show eyelasersleft
+    show eyelasersright
+    pause(1.0)
+    hide eyelasersleft
+    hide eyelasersright
     S "And now to save my love!"
     call beginning_of_the_end
+    call loved_betrayed
     jump over
     
 label over:
     scene bg fin
     with Dissolve(1.0)
-    centered "Thanks for playing!"
+    centered "Thanks for playing!  You finished the game in [turn_count] cycles!  Try to beat that in more playthroughs and unlock all the endings!"
     scene bg credits
     with Dissolve(0.5)
     scene bg credits

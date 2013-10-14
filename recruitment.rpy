@@ -1,3 +1,5 @@
+image bg recruit = "recruitment_ground.png"
+
 screen recruitment_image:
     imagemap:
         auto "recruitment_%s.png" 
@@ -17,15 +19,15 @@ screen recruitment_image:
         hotspot (550, 223, 23, 23) action Return("add10G")
         hotspot (550, 193, 23, 23) action Return("add1G")
 
-        hotspot (339, 445, 23, 23) action Return("sub10DG")
-        hotspot (339, 475, 23, 23) action Return("sub1DG")
-        hotspot (454, 445, 23, 23) action Return("add10DG")
-        hotspot (454, 475, 23, 23) action Return("add1DG")
+        hotspot (339, 445, 23, 23) action Return("sub1DG")
+        hotspot (339, 475, 23, 23) action Return("sub10DG")
+        hotspot (454, 445, 23, 23) action Return("add1DG")
+        hotspot (454, 475, 23, 23) action Return("add10DG")
         
-        hotspot (532, 445, 23, 23) action Return("sub10E")
-        hotspot (532, 475, 23, 23) action Return("sub1E")
-        hotspot (646, 445, 23, 23) action Return("add10E")
-        hotspot (646, 475, 23, 23) action Return("add1E")
+        hotspot (532, 445, 23, 23) action Return("sub1E")
+        hotspot (532, 475, 23, 23) action Return("sub10E")
+        hotspot (646, 445, 23, 23) action Return("add1E")
+        hotspot (646, 475, 23, 23) action Return("add10E")
         
         
         hotspot (585, 10, 155, 35) action Return("exit")
@@ -74,6 +76,12 @@ label recruitmentRoutine:
     $rTempDGeneratorCount = 0
     $rTempEMPCount = 0
     
+    if tutorial_recruitment:
+        scene bg recruit
+        G "Use this screen to up your troop count."
+        G "Every turn, your star systems allow you to train a certain number of troops of each ship type, but remember, you cannot train more ships than you have available troops!"
+        $tutorial_recruitment = False
+    
     while(rRecruiting):
         window hide None
         call screen recruitment_image
@@ -85,7 +93,7 @@ label recruitAction(input):
     if input == "exit":
         $rRecruiting = False
     elif input == "helpScreen":
-        call helpScreen
+        call screen helpScreen
     elif input == "confirmRecruit":
         $rRecruiting = False
         $shipUntrainedCount = rTempUntrained

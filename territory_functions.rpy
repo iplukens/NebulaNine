@@ -16,6 +16,11 @@ init python:
         for i in territories:
             if i.owner != mPlayer:
                 i.setOwner(mG)
+    def has_territories(owner):
+        for i in territories:
+            if i.owner == owner:
+                return True
+        return False
 
 label set_recruitment:
     $recruitUntrainedCount = 0

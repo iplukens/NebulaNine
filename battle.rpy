@@ -6,11 +6,21 @@ label battle_routine:
     while(battle_on):
         window hide None
         scene bg battle
-        $draw_queue()
-        $draw_ships()
         $remove_dead_units()
         $sort_units()
+        $draw_queue()
+        $draw_ships()
         $unit_queue[0].setDefending(False)
+        if tutorial_battle_intro:
+            G "A quick intro, [miperson], lest these bandits get the best of you."
+            G "As you can see, your battalions are on the left, and the enemy is on the right.  Then, up above, you can see the order in which the ships will move."
+            G "On your move, you have up to four commands available for your ships.  First is attack."
+            G "Select attack and then an enemy ship to engage it in Space Combat."
+            G "Your next option is to Defend.  This will lessen this battalion's losses from enemy attacks and ensure more potent counterattacks."
+            G "The third option is a special ability, not available to all ships.  Be sure to refer to the help screen to figure out what your special will do."
+            G "Then, of course, the last option is to surrender.  Should you feel you are losing a battle, feel free to cut your losses and retreat."
+            G "That's all, [miperson].  I wish you luck."
+            $tutorial_battle_intro = False
         if unit_queue[0].owner == mPlayer:
             call player_battle
         else:
@@ -27,11 +37,12 @@ screen battle_input:
         auto "battle_%s.png"
         $draw_queue()
         $draw_ships()
-        textbutton "Attack!" xpos 330 ypos 60 action Return("attack")
-        textbutton "Defend!" xpos 330 ypos 125 action Return("defend")
+        hotspot(325, 300, 150, 35) action Return("attack")
+        hotspot(325, 344, 150, 35) action Return("defend")
         if unit_queue[0].type.special != "none":
-            textbutton "[unit_queue[0].type.special]!" xpos 330 ypos 190 action Return("special")
-        textbutton "Surrender!" xpos 330 ypos 155 action Return("surrender")
+            hotspot(325, 388, 150, 35) action Return("special")
+        hotspot(325, 432, 150, 35) action Return("surrender")
+        hotspot (750, 10, 35, 35) action Return ("helpScreen")
     
 screen draw_ships_clickable:
     imagemap:
@@ -49,11 +60,10 @@ label ai_battle:
             $cpu_attack()
     elif unit_queue[0].type == fighter or unit_queue[0].type == scout:
         $cpu_attack()
-        play sound "laser.wav"
-        with hpunch
     else:
         $num = renpy.random.randint(0, 1)
         if num > 0.25:
+            play sound "shield.wav"
             $up_shields()
         else:
             $cpu_attack()
@@ -68,6 +78,9 @@ label player_battle:
         $unit_queue[0].setDefending(True)
     elif b_result == "special":
         call special_routine
+    elif b_result == "helpScreen":
+        call screen helpScreen
+        call player_battle
     else:
             call surrender
     return
@@ -76,9 +89,6 @@ label attack_routine:
     call screen draw_ships_clickable
     $position_index = _return
     $attack_them(unit_queue[0], unit_queue[find_guy(position_index)])
-    $ renpy.play('laser.wav')
-    with hpunch
-    pause(1.0)
     return
 
 label special_routine:
@@ -88,11 +98,13 @@ label special_routine:
         $position_index = _return
         $dream_beam(unit_queue[find_guy(position_index)])
         show dreambeam
+        play sound "longlaser.wav"
         pause(1.0)
     if unit_queue[0].type == emp:
         $wipeShields()
         play sound "emp.mp3"
     if unit_queue[0].type == generator or unit_queue[0].type == dgenerator:
+        play sound "shield.wav"
         $up_shields()
     return
 
@@ -120,6 +132,9 @@ label update_battle:
         $territory.setOwner(enemy)
     elif enemy_count == 0:
         G "A glorious victory, [miperson!]"
+        if end_tutorial_battle:
+            G "Odd that the enemy ships were red though.  Those are the colors of Estelle..."
+            $end_tutorial_battle = False
         $territory.setOwner(mPlayer)
     return
 
@@ -153,5 +168,5 @@ label battle_init:
             if (aFullArmy[i].type == "emp"):
                 unit_queue.append(unit(i + 5, emp, aFullArmy[i].count, emp.initiative, mPlayer))
             if (aFullArmy[i].type == "command"):
-                unit_queue.append(unit(i + 5, command, (aFullArmy[i].count + 4) * turnCount, command.initiative, mPlayer))
+                unit_queue.append(unit(i + 5, command, 5 + (aFullArmy[i].count + 4) * turnCount, command.initiative, mPlayer))
     return

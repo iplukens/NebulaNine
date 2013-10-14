@@ -11,6 +11,7 @@ label AH_init_values:
     return
 
 label AH_event:
+    $hicks_timeout = 0
     scene bg m_cc
     show gaius neutral at Position(xpos = 95, xanchor=0, ypos=1.0, yanchor=500)
     call display_character_left pass ("neutral")
@@ -26,13 +27,18 @@ label AH_event:
 
 label AH_first_meeting:
     G "I sent out the summons [miperson], and they've agreed to meet with us.  Ser Alfred Hicks should be here any moment."
-    "..."
-    "---30 minutes pass---"
-    S "Any moment you said?"
+    scene black
+    with Dissolve(0.5)
+    centered "30 minutes later"
+    scene bg m_cc
+    with Dissolve(0.5)
+    show gaius neutral at Position(xpos = 95, xanchor=0, ypos=1.0, yanchor=500)
+    call display_character_left pass ("neutral")
+    S "Any moment, you said?"
     G "Any moment."
     call hide_character("neutral")
     call display_character_left("angry")
-    S "Well, I will not be made to wait like some fool!  Get their ambassador on the line.  I demand an audience and now!"
+    S "Well, I will not be made to wait like some fool!  Get their ambassador on the line.  I demand an audience immediately!"
     G "No need, [miperson].  Here he is now."
     show AH happy at right
     AH "Ooo-wee! Just got done hunting some space goose.  Now, what's this 'urgent' business you been hollering about?"
@@ -223,21 +229,30 @@ label AH_progress:
         AH "What does it mean?  What does it mean?"
         AH "It means my territory is your territory.  Feel free to go gallavantin' on through and save that pretty [l_title] o' yours!"
         S "Thank, Sir Hicks!  Truly thank you!"
-        "---Congratulations!  You successfully allied with the Masters of Space!---"
+        scene black
+        with Dissolve(0.5)
+        centered "---Congratulations!  You successfully allied with the Masters of Space!---"
+        python:
+            for i in territories:
+                if i.owner == mAH:
+                    i.owner = mPlayer
     return
     
 label AH_time_out_war:
+    scene bg m_cc
     show AH angry
     AH "I don't know what you're playing at [c_boygirl], but I ain't got time to sit 'round and watch you toy with me an' plot my demise.  Consider us enemies."
-    "---You are now at war with the Masters of Space!---"
+    scene black
+    with Dissolve(0.5)
+    centered "---You are now at war with the Masters of Space!---"
     $mAH.toWar()
     return
     
 label AH_event_1a:
     G "Here comes Alfred Hicks now, [miperson].  Remember what happened last time.  It's important to be charming and persuasive but also to use small words."
     S "That's rather rude, Gaius."
-    G "Sorry, [miperson].  I meant no disrespect.  The Masters of Space are honorable people."
-    S "I meant the notion that I'd have to be reminded to be charming.  I mean, really."
+    G "Sorry, [miperson].  I meant no disrespect. The Masters of Space are honorable people."
+    S "I meant the notion that I'd have to be reminded to be charming. I mean, really."
     G "Yes, of course."
     show AH neutral at right
     AH "Alright, I've come ta yer little meeting like ya' asked, but you know how I feel about all this lover [c_boygirl] business."
@@ -269,22 +284,24 @@ label AH_nothing:
     S "And NOTHING, YOU IDIOT!  I am the ruler of Dreamion, and you need to show me appropriate respect!  I do not grovel!  I do not ask where I can and cannot go!  I go there, and the people worship me as I pass through!"
     hide AH neutral
     show AH angry at right
-    AH "Oh is that so?  Well excuuuuuse me your high holiness, but you ain't no Mastah a' Space, so I don't gotta listen to none a' this!"
+    AH "Oh is that so?  Well excuuuuuse me, your high holiness, but you ain't no Mastah a' Space, so I don't gotta listen to none a' this!"
     AH "You Dreamion punks and your pretty little [l_title] can all go die o' Space Pox for all I care!"
-    S "Yeah?! Not before we blaze your little star system into nothing but ashe!"
+    S "Yeah?! Not before we blaze your little star system to ashes!"
     hide AH angry
     G "That went well, [miperson].  Shall we prepare for war?"
     S "At once."
-    "---You are now at war with the Masters of Space---"
+    scene black
+    with Dissolve(0.5)
+    centered "---You are now at war with the Masters of Space---"
     $mAH.toWar()
     return
     
 label AH_personal:
-    S "You have to understand!  [l_capital_title] [l_name] is the love of my life!  I cannot possibly sit by and watch her die."
-    S "I must do everything in my power in order to save her."
+    S "You have to understand!  [l_capital_title] [l_name] is the love of my life! I cannot possibly sit by and watch [l_pronoun] die."
+    S "I must do everything in my power in order to save [l_pronoun]."
     AH "Yeah, some sob story, is it?  Some true love nonsense?  Well, it's as I said before.  The Mastahs a' Space don't change years a' tradition for some snot nosed punk."
     S "But [l_pronoun]'ll die if you don't let me through!"
-    AH "[l_cpronoun] ain't my concern, [c_boygirl].  I protect me and my own, and [l_pronoun] ain't no Mastah a' Space last I checked."
+    AH "[l_cpronoun] ain't my concern, [c_boygirl].  I protect me and my own, and [l_name] ain't no Mastah a' Space last I checked."
     menu:
         "How can you be so heartless?":
             call AH_sob_story_MORE
@@ -304,14 +321,16 @@ label AH_personal:
     return
     
 label AH_sob_story_MORE:
-    S "How can you just let [l_pronoun] die?  Do you not have any compassion?"
-    AH "Like I says, I look out for me and mine first, and I know you understand that.  Now if you'll excuse me, I got work to do."
+    S "How can you just let [l_pronoun] die? Have you no compassion?"
+    AH "Like I says, I look out for me and mine first. You of all people should understand that. Now if you'll excuse me, I got work to do."
     hide AH neutral
-    S "Damn.  Cold as ice."
-    G "It's seeming more and more unlikely that he'll let us through, [miperson].  Perhaps we should increase production on sheild ships?  The Masters of Space are not technologically advanced enough to make EMPs, you know?"
-    S "Of course I know that, Gaius.  I just need to save my [l_capital_title]!"
+    S "Damn. Cold as ice."
+    G "It's seeming more and more unlikely that he'll let us through, [miperson]. Perhaps we should increase production on shield ships? The Masters of Space are not technologically advanced enough to make EMPs, you know."
+    S "Of course I know that, Gaius. I just need to save my [l_title]!"
     G "Yes, and by any means necessary.  I know."
-    "---End Diplomacy - your relationship with the Masters of Space has not changed.---"
+    scene black
+    with Dissolve(0.5)
+    centered "---End Diplomacy - your relationship with the Masters of Space has not changed.---"
     return
     
 label AH_become_one:
@@ -320,24 +339,28 @@ label AH_become_one:
     S "What if [l_pronoun] were to become a Master of Space?"
     hide AH neutral
     show AH angry at right
-    AH "Oh that's how you want to play it, huh?  Insults!?"
+    AH "Oh that's how you want to play it, huh? Insults!?"
     AH "You think you can just become a Master of Space?"
     AH "Master of Space is in yer blood or it's not, and it ain't in you stupid Dreamion dreamers!"
     S "I didn't mean any offense!  I just wanted-!"
     AH "It don't matter what ya' just wanted!  It matters what ya' got, and you got yerself a war, boyo!"
-    S "Wait I-!"
+    S "Wait, I-!"
     hide AH angry
     S "Damn, that backfired."
     G "Perhaps for the best, [miperson].  Let's prepare for war."
-    "---You are now at war with the Masters of Space---"
+    scene black
+    with Dissolve(0.5)
+    centered "---You are now at war with the Masters of Space---"
     $mAH.toWar()
     return
     
 label AH_bastard:
-    S "You bastard!  [l_cpronoun]'s dying!"
+    S "You bastard! [l_cpronoun]'s dying!"
     AH "..."
     hide AH
-    "---You are now at war with the Masters of Space---"
+    scene black
+    with Dissolve(0.5)
+    centered "---You are now at war with the Masters of Space---"
     $mAH.toWar()
     return
     
@@ -349,7 +372,7 @@ label AH_what_do_YOU_want:
     S "And that is?"
     AH "See, I actually been havin' some problems with another Masters of Space family headed by the nefarious Randolph McCoy.  See, they thinks they have rights to my territories whereas them being MY territories, I thinks otherwise."
     S "I see."
-    AH "So here's how it's gonna be.  You drive the McCoys outta them territories, and I let you have passage through it.  Deal?"
+    AH "So here's how it's gonna be. You drive the McCoys outta them territories, and I let you have passage through it. Deal?"
     call AH_event_1
     return
     
@@ -365,7 +388,7 @@ label AH_event_1b:
 label AH_event_2:
     G "Here comes Sir Hicks as expected."
     show AH happy at right
-    AH "Ah, if it isn't ma' fav'rite non Masters of Space!"
+    AH "Ah, if it isn't ma' fav'rite non-Masters of Space!"
     S "Hello, Sir Hicks."
     AH "Let's get down ta' bus'ness, right?"
     AH "You ready to cotinue yer fine work against the nefarious, evil Randolph McCoy?"
@@ -394,65 +417,78 @@ label AH_event_1:
 label AH_attack_McCoy:
     S "To battle we go!"
     AH "Atta boy!  Let's get that rapscallion!"
-    $mMcCoy = Owner("m", "orange", [Battalion("scout",1),Battalion("None",0),Battalion("None",0),Battalion("None",0),Battalion("None",0)], "{color=#ffffff}")
-    $enemy = territory.owner
+    $mMcCoy = Owner("m", "orange", [Battalion("fighter",14),Battalion("emp",9),Battalion("emp",12),Battalion("emp",5),Battalion("fighter",1)], "{color=#ffffff}")
+    $enemy = mMcCoy
     call allocationRoutine
     if territory.owner != mPlayer:
+        $territory.setOwner(mAH)
+        scene bg m_cc
+        call dcl("neutral")
+        show AH neutral at right
         AH "Well, that's a damn shame.  A damn shame."
         AH "I know you tried, but... Well, that's a damn shame.  I'll be takin' my leave now."
         hide AH neutral
-        S "This bastard watches my troops get slaughtered, and that's all he can say?!"
-        G "This setback ought not be forgiven, [miperson].  Be careful how you proceed from here.  Your love's life hangs in the balance"
-        "---End diplomacy - your relationship with the Masters of Space has not changed---"
+        S "That bastard watched my troops get slaughtered over HIS territory, and that's all he can say?!"
+        G "This setback ought not to be forgiven, [miperson].  Be careful how you proceed from here.  Your love's life hangs in the balance"
+        scene black
+        with Dissolve(0.5)
+        centered "---End diplomacy - your relationship with the Masters of Space has not changed---"
     else:
-        hide AH neutral
+        scene bg m_cc
+        call dcl("neutral")
         show AH happy at right
-        AH "A glorious victory!  Well done boyo!  And as promised you get acess to the territory."
+        AH "A glorious victory!  Well done boyo! And as promised, you get access to the territory."
         S "No problem.  It was my pleasure to put the nefarious McCoy back in his place."
-        "---End Diplomacy - your relationship with The Masters of Space has improved!---"
+        scene black
+        with Dissolve(0.5)
+        centered "---End Diplomacy - your relationship with The Masters of Space has improved!---"
         $AH_relationship += 1
     $repetitions += 1
     return
     
 label AH_rMcCoy:
-    S "I have never heard of this McCoy person before, Sir Hicks."
+    S "I have never heard of this McCoy before, Sir Hicks."
     S "How exactly is he nefarious?"
-    AH "Oh, he is the worst kinda people.  You don't wanna hang out with th' likes a' him."
+    AH "Oh, he is the worst kinda people. You don't wanna hang around th' likes a' him."
     S "How so?"
     AH "He fought for the Space Brigade during the Masters of Space Civil War.  I'm sure you studied that in one o' yer fancy schools, but anyway..."
     AH "He's a right bandit, sure 'nough.  He's been parading 'round the Nebula like he owns th' place takin' what ain't his."
     AH "Attacked my brother Tom Hicks without so much as the drop of a hat in a field too."
     S "A hat in a field?  Interesting..."
-    S "Gaius, what do you know about this Randolph McCoy."
+    S "Gaius, what do you know about Randolph McCoy?"
     G "Although our scouting is extensive, [miperson], I cannot say that we have heard of any of these 'nefarious deeds' to which Sir Alfred Hicks alludes."
     hide AH neutral
     show AH angry at right
-    AH "You callin' me a liar?  That's an insult ta' my honor I'll have ya' know."
-    G "Just relaying information, sir.  I meant no implication of the sort."
+    AH "You callin' me a liar?  That's an insult ta' my honor, I'll have ya' know."
+    G "Just relaying information, sir.  I meant no insult."
     AH "And what's that 'sposed t' mean?"
     S "He was just saying-"
     AH "Nah, I know what he was just sayin', and I'll have none of it!  Consider the deal off, and don't 'cha dare show yer face in my side of the Nebula, ya' hear?!"
     hide AH angry
     G "A very tempermental fellow, isn't he?  I guess it can't be helped, [miperson]."
     S "We go to war."
-    "---You are now at war with the Masters of Space!---"
+    scene black
+    with Dissolve(0.5)
+    centered "---You are now at war with the Masters of Space!---"
     $mAH.toWar()
     return
     
 label AH_refusal:
     S "Sadly I don't think my army is in fighting shape at the moment, but you have my word that I will take care of this McCoy person for you."
-    AH "Eh, just 'cause I didn't have fancy schoolin' like you did, don't mean I ain't got plenty o' words already.  I'll have yer ships, not your words, and that's a fact."
+    AH "Eh, just 'cause I didn't have fancy schoolin' like you did, don't mean I ain't got plenty o' words already. I'll have yer ships, not your words, and that's a fact."
     S "My army isn't ready!  You will have my aid soon enough, I swear it!"
-    AH "Uh-huh, don't be condscendin' me boyo.  I ain't got the time."
+    AH "Uh-huh, don't be condscendin' me boyo. I ain't got the time."
     AH "I'll see myself out."
     hide AH neutral
     S "Drat, he sure is difficult to please."
     G "As always, [miperson], the Masters of Space are more trouble than they are worth.  Perhaps another course of action will be more productive?"
     S "War?"
     G "It pains me to say it, but with your [l_title]'s life on the line, there is little choice in the matter."
-    S "We'll have to see Gaius."
+    S "We'll have to see, Gaius."
     S "We'll have to see..."
-    "---End Diplomacy - your relationship with the Masters of Space has decreased!---"
+    scene black
+    with Dissolve(0.5)
+    centered "---End Diplomacy - your relationship with the Masters of Space has decreased!---"
     $AH_relationship -= 1
     return
     

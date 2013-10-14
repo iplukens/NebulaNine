@@ -1,6 +1,49 @@
 ###Define classes and other nice objects here so we can call them in the game
 init python:
-    
+    def gen_randmotion(count, dist, delay):
+
+            import random
+
+            args = [ ]
+
+            for i in range(0, count):
+                args.append(anim.State(i, None,
+                                       Position(xpos=random.randrange(-dist, dist),
+                                                ypos=random.randrange(-dist, dist),
+                                                xanchor='left',
+                                                yanchor='top',
+                                                )))
+
+            for i in range(0, count):
+                for j in range(0, count):
+
+                    if i == j:
+                        continue
+
+                    args.append(anim.Edge(i, delay, j, MoveTransition(delay)))
+
+            return anim.SMAnimation(0, *args)
+
+    store.randmotion = gen_randmotion(5, 25, 0.5)
+        
+    def double_vision_on(picture):
+
+        renpy.scene()
+
+        renpy.show(picture)
+
+        renpy.show(picture, at_list=[transpa,randmotion], tag="blur_image")
+
+        renpy.with_statement(dissolve)
+
+
+    def double_vision_off():
+
+        renpy.hide("blur_image")
+
+        renpy.with_statement(dissolve)
+        
+        
     class Laser(object):
         def __init__(self, x, y, dx , function=None):
             self.transform = Transform(child="laser.png", xanchor=0.5, yanchor=0.5, function=function)
@@ -59,12 +102,15 @@ init python:
             self.defense = defense
             self.special = special
             self.name = name
-    scout = stat_list(3, 1, 1, 1, "none", "_scout_ship")
-    fighter = stat_list(5, 2, 3, 2, "none", "_fighter")
-    generator = stat_list(2, 4, 2, 5, "Shield", "_row_shield_ship")
-    dgenerator = stat_list(1, 4, 2, 5, "All-shield", "_shield_ship")
-    emp = stat_list(3, 3, 4, 4, "EMP", "_emp_ship")
-    command = stat_list(3, 3, 3, 3, "DREAM-BEAM", "_cc")
+            
+### attack, speed, init, def
+
+    scout = stat_list(1.5, 1.5, 1, 1, "none", "_scout_ship")
+    fighter = stat_list(3, 2, 2.5, 1.5, "none", "_fighter")
+    generator = stat_list(1, 2, 2, 3, "Shield", "_row_shield_ship")
+    dgenerator = stat_list(1, 2, 2, 3, "All-shield", "_shield_ship")
+    emp = stat_list(2, 2.5, 2.4, 2, "EMP", "_emp_ship")
+    command = stat_list(2, 3, 3, 1.5, "DREAM-BEAM", "_cc")
 
 ### BATTLE CLASSES -- SO MANY !!! ---
     class unit:
@@ -79,8 +125,6 @@ init python:
         def setDefending(self, input):
             self.defending = input
         def kill(self, number):
-            if (number == 0):
-                number = 1
             temp = self.shield
             self.shield -= number
             if (self.shield < 0):
@@ -120,6 +164,7 @@ init python:
                     shipEMPCount -= number
                     deployedEMPCount -= number
             else:
+                global kill_count
                 kill_count += number
             self.count -= number
 
@@ -146,10 +191,9 @@ init python:
         return
 
     def draw_queue():
-        queue_string = unit_queue[0].owner.color_code + unit_queue[0].type.name + "{/color}"
-        for i in range(1, len(unit_queue)):
-            queue_string += ", " + unit_queue[i].owner.color_code + unit_queue[i].type.name + "{/color}"
-        ui.text(queue_string, xoffset=10, yoffset=30)
+        for i in range(0, len(unit_queue)):
+            ship_name =  unit_queue[i].owner.name + unit_queue[i].type.name + ".png"
+            ui.imagebutton(ship_name, ship_name, xpos=i*90, ypos=55)
         return
         
     def draw_ships():
@@ -160,38 +204,39 @@ init python:
             shield = "{color=#00f}" + str(unit_queue[i].shield) + "{/color}"
             if pos < 3:
                 if i == 0:
-                    ui.imagebutton("active_unit_indicator.png", "active_unit_indicator.png", xpos=675, ypos=330+(pos*90))
-                ui.imagebutton(ship_name, ship_name, xpos=675, ypos=330+(pos*90))
-                ui.text(count, xoffset=675+80, yoffset=330+(pos*90)+55)
-                ui.text(shield, xoffset=675+80, yoffset=330+(pos*90))
+                    ui.imagebutton("active_unit_indicator.png", "active_unit_indicator.png", xpos=668, ypos=217+(pos*129))
+                ui.imagebutton(ship_name, ship_name, xpos=668, ypos=215+(pos*129))
+                ui.text(count, xoffset=674, yoffset=306+(pos*129))
+                ui.text(shield, xoffset=742, yoffset=307+(pos*129), size=10)
             elif pos < 5:
                 if i == 0:
-                    ui.imagebutton("active_unit_indicator.png", "active_unit_indicator.png", xpos=510, ypos=395+((pos-3)*90))
-                ui.imagebutton(ship_name, ship_name, xpos=510, ypos=395+((pos-3)*90))
-                ui.text(count, xoffset=510+80, yoffset=395+((pos-3)*90)+55)
-                ui.text(shield, xoffset=510+80, yoffset=395+((pos-3)*90))
+                    ui.imagebutton("active_unit_indicator.png", "active_unit_indicator.png", xpos=530, ypos=281+((pos-3)*129))
+                ui.imagebutton(ship_name, ship_name, xpos=530, ypos=281+((pos-3)*129))
+                ui.text(count, xoffset=530, yoffset=369+((pos-3)*129))
+                ui.text(shield, xoffset=604, yoffset=371+((pos-3)*129), size=10)
             elif pos < 8:
                 if i == 0:
-                    ui.imagebutton("active_unit_indicator.png", "active_unit_indicator.png", xpos=60, ypos=330+((pos - 5)*90))
-                ui.imagebutton(ship_name, ship_name, xpos=60, ypos=330+((pos - 5)*90))
-                ui.text(count, xoffset=60+80, yoffset=330+((pos-5)*90)+55)
-                ui.text(shield, xoffset=60+80, yoffset=330+((pos-5)*90))
+                    ui.imagebutton("active_unit_indicator.png", "active_unit_indicator.png", xpos=35, ypos=215+((pos - 5)*129))
+                ui.imagebutton(ship_name, ship_name, xpos=35, ypos=215+((pos - 5)*129))
+                ui.text(count, xoffset=41, yoffset=215+((pos-5)*129)+88)
+                ui.text(shield, xoffset=109, yoffset=306+((pos-5)*129), size=10)
             else:
                 if i == 0:
-                    ui.imagebutton("active_unit_indicator.png", "active_unit_indicator.png", xpos=225, ypos=395+((pos-8)*90))
-                ui.imagebutton(ship_name, ship_name, xpos=225, ypos=395+((pos-8)*90))
-                ui.text(count, xoffset=225+80, yoffset=395+((pos-8)*90)+55)
-                ui.text(shield, xoffset=225+80, yoffset=395+((pos-8)*90))
+                    ui.imagebutton("active_unit_indicator.png", "active_unit_indicator.png", xpos=173, ypos=280+((pos-8)*130))
+                ui.imagebutton(ship_name, ship_name, xpos=173, ypos=280+((pos-8)*130))
+                ui.text(count, xoffset=179, yoffset=280+((pos-8)*129)+88)
+                ui.text(shield, xoffset=247, yoffset=370+((pos-8)*129), size=10)
         return
     def draw_battle_hotspots():
+        ui.imagebutton("star_overlay.png", "star_overlay.png", xpos=309, ypos=285)
         for i in range(0, len(unit_queue)):
             button_ground = "unit_button_ground.png"
             button_hover = "unit_button_hover.png"
             pos = unit_queue[i].position
             if pos < 3:
-                ui.imagebutton(button_ground, button_hover, xpos=675, ypos=330+(pos*90), clicked=ui.returns(pos))
+                ui.imagebutton(button_ground, button_hover, xpos=668, ypos=217+(pos*129), clicked=ui.returns(pos))
             elif pos < 5:
-                ui.imagebutton(button_ground, button_hover, xpos=510, ypos=395+((pos-3)*90), clicked=ui.returns(pos))
+                ui.imagebutton(button_ground, button_hover, xpos=530, ypos=281+((pos-3)*129), clicked=ui.returns(pos))
         return
 
 #### positions for the ai actions
@@ -202,28 +247,31 @@ init python:
 
 #### LOOK OVER THIS - should shield ships also get shields?
     def up_shields():
+        renpy.play('shield.wav')
         if unit_queue[0].type == generator:
             for i in unit_queue:
                 if i.owner == unit_queue[0].owner:
                     if unit_queue[0].position < 3 and i.position < 3:
-                        i.shield += unit_queue[0].count / 2
-                    elif unit_queue[0].position < 5 and i.position < 5:
-                        i.shield += unit_queue[0].count / 2
-                    elif unit_queue[0].position < 8 and i.position < 8:
-                        i.shield += unit_queue[0].count / 2
-                    else:
-                        i.shield += unit_queue[0].count / 2
+                        i.shield += 1 + unit_queue[0].count / 8
+                    elif unit_queue[0].position < 5 and unit_queue[0].position >= 3 and i.position < 5 and i.position >= 3:
+                        i.shield += 1 + unit_queue[0].count / 8
+                    elif unit_queue[0].position < 8 and unit_queue[0].position >= 5 and i.position < 8 and i.position >= 5:
+                        i.shield += 1 + unit_queue[0].count / 8
+                    elif unit_queue[0].position >= 8 and i.position >= 8:
+                        i.shield += 1 + unit_queue[0].count / 8
         else:
             for i in unit_queue:
                 if i.owner == unit_queue[0].owner:
-                    i.shield += unit_queue[0].count / 3
+                    i.shield += 1 + unit_queue[0].count / 10
 
     def get_dead_attack(attacker, defendee):
         if defendee.defending:
-            d_attack_val = ((defendee.type.attack + defendee.type.defense) / 2) * defendee.count * 1.5 / 2
+            d_attack_val = ((defendee.type.attack) / 2) * defendee.count * 1.5 / 2
         else:
-            d_attack_val = ((defendee.type.attack + defendee.type.defense) / 2) * defendee.count / 2
+            d_attack_val = ((defendee.type.attack) / 2) * defendee.count / 2
         dead_attack = d_attack_val / (attacker.type.defense * 2)
+        if dead_attack < 1:
+            dead_attack = 1
         return dead_attack
 
     def get_dead_defense(attacker, defendee):
@@ -233,6 +281,8 @@ init python:
             dead_defense = (attacker.type.attack * attacker.count) / defendee.type.defense
         if defendee.position < 3 or (defendee.position > 4 and defendee < 8):
             dead_defense = dead_defense * .5
+        if dead_defense < 1:
+            dead_defense = 1
         return dead_defense
 
     def attack_them(attacker, defendee):
@@ -262,9 +312,10 @@ init python:
                     defendee = i
         if best_attack == 0:
             unit_queue[0].setDefending(True)
+            return 0
         else:
             attack_them(unit_queue[0], defendee)
-        return
+            return 1
 
     def find_guy(position):
         for i in range (0, len(unit_queue)):
@@ -273,6 +324,7 @@ init python:
         return -1
             
     def dream_beam(guy):
+        unit_queue[0].initiative += 40
         ship_name = "d_cc.png"
         ui.imagebutton(ship_name, ship_name, xpos=20, ypos=100)
         guy.count = 0
@@ -280,7 +332,7 @@ init python:
     def wipeShields():
         for i in range (0, len(unit_queue)):
             if unit_queue[i].owner != unit_queue[0].owner:
-                unit_queue[i].shields = 0
+                unit_queue[i].shield = 0
             
     def check_counts():
         global enemy_count
@@ -295,25 +347,29 @@ init python:
         return
         
     def draw_attack_animation(attacker,defender):
+        renpy.scene()
+        num = renpy.random.randint(1,3)
+        renpy.show("space_" + str(num))
+        renpy.play('laser.wav')
     
     #Sets the offset we will draw at, this way player is always on the left
         if attacker.owner != mPlayer:
-            xAttackerOffset = 520
-            xDefenderOffset = 25
+            xAttackerOffset = 400
+            xDefenderOffset = 0
         else:
-            xAttackerOffset = 25
-            xDefenderOffset = 520
+            xAttackerOffset = 0
+            xDefenderOffset = 400
     
     #Sets up the ship count we will use, only exception is Command Center is always 1
-        if attacker.type.name == "command":
+        if attacker.type == command:
             attackShips = 1
         else :
-            attackShips = 1 + attacker.count/10
+            attackShips = 1 + attacker.count/3
     
-        if defender.type.name == "command":
+        if defender.type == command:
             defendShips = 1
         else :
-            defendShips = 1 + defender.count/10
+            defendShips = 1 + defender.count/3
     
         ship_name =  attacker.owner.name + attacker.type.name + ".png"
         
@@ -322,8 +378,8 @@ init python:
         global lasers
         lasers = [Laser(0, 900, 1000, function=laser_update)]
         for i in range (0 , attackShips):
-            xcoord = renpy.random.randint(0, 280)
-            ycoord = renpy.random.randint(60, 300)
+            xcoord = renpy.random.randint(50, 350)
+            ycoord = renpy.random.randint(60, 540)
             
             if attacker.owner == mPlayer:
                 lasers.append(Laser(xAttackerOffset + xcoord, ycoord, 1000))
@@ -339,4 +395,5 @@ init python:
             
         for i, b in enumerate(lasers):
             renpy.show("lasers%d" % i, what=b.transform)
+        renpy.pause(1.0)
         return

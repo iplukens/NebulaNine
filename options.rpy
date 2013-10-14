@@ -12,8 +12,8 @@ init -1 python hide:
     ## Should we enable the use of developer tools? This should be
     ## set to False before the game is released, so the user can't
     ## cheat using developer tools.
-
-    config.developer = True
+    config.hard_rollback_limit = 0
+    config.developer = False
 
     ## These control the width and height of the screen.
 
@@ -23,15 +23,16 @@ init -1 python hide:
     ## This controls the title of the window, when Ren'Py is
     ## running in a window.
 
-    config.window_title = u"Nebula Nine"
-
-    # Disable rollback
-    config.hard_rollback_limit = 0
+    config.window_title = "Nebula Nine"
 
     # These control the name and version of the game, that are reported
     # with tracebacks and other debugging logs.
-    config.name = "A Ren'Py Game"
+    config.name = "Nebula Nine"
     config.version = "0.0"
+
+    ## This is the icon used for the game
+    config.window_icon = "window_icon.png"
+    config.windows_icon = "icon.png"
 
     #########################################
     # Themes
@@ -75,12 +76,12 @@ init -1 python hide:
         ## The background of the main menu. This can be a color
         ## beginning with '#', or an image filename. The latter
         ## should take up the full height and width of the screen.
-        mm_root = "title_screen.png",
+        mm_root = "space_nebula_ground.png",
 
         ## The background of the game menu. This can be a color
         ## beginning with '#', or an image filename. The latter
         ## should take up the full height and width of the screen.
-        gm_root = "title_screen.png",
+        gm_root = "space_nebula_ground.png",
 
         ## If this is True, the in-game window is rounded. If False,
         ## the in-game window is square.
@@ -277,12 +278,12 @@ init python:
     ## The name that's used for directories and archive files. For example, if
     ## this is 'mygame-1.0', the windows distribution will be in the
     ## directory 'mygame-1.0-win', in the 'mygame-1.0-win.zip' file.
-    build.directory_name = "NebulaNine-1.0"
+    build.directory_name = "DreamBeam-1.0"
     
     ## The name that's uses for executables - the program that users will run
     ## to start the game. For example, if this is 'mygame', then on Windows,
     ## users can click 'mygame.exe' to start the game.
-    build.executable_name = "NebulaNine"
+    build.executable_name = "DreamBeam"
     
     ## If True, Ren'Py will include update information into packages. This
     ## allows the updater to run.

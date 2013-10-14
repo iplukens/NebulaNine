@@ -1,19 +1,22 @@
 image bg b_cc = "b_CC_bg.png"
 define RB = Character(_("ROBBIT"), color="#00ff00")
 
-label RB_init_values:
+init:
     $RB_relationship = 0
     $RB_findPart = 0
-    $RB_eye = True
-    $RB_frog_leg = True
-    $RB_webbed_foot = True
-    $RB_frog_brain = True
+    $RB_eye = False
+    $RB_frog_leg = False
+    $RB_webbed_foot = False
+    $RB_frog_brain = False
     image RB angry = "r_bust_angry.png"
     image RB angry eye = "r_bust_angry_eye.png"
     image RB sad = "r_bust_sad.png"
     image RB sad eye = "r_bust_sad_eye.png"
     image RB neutral = "r_bust_neutral.png"
     image RB neutral eye = "r_bust_neutral_eye.png"
+    $RB_1A_seen = False
+    $RB_2A_seen = False
+    $RB_3A_seen = False
     return
 
 label RB_event:
@@ -22,7 +25,6 @@ label RB_event:
     call display_character_left pass ("neutral")
     if not RB_first:
         $RB_first = True
-        call RB_init_values
         call RB_first_meeting
     else:
         call RB_progress
@@ -141,11 +143,13 @@ label RB_1A:
     scene bg b_cc
     show gaius neutral at Position(xpos = 95, xanchor=0, ypos=1.0, yanchor=500)
     call display_character_left pass ("neutral")
-    G "Are you prepared to see ROBBIT, [miperson]? He seems rather... unstable, to put it kindly."
-    S "Gaius, you worry too much. He is in great need of our help. If we assist him, we have a chance of securing safe passage through his terrority and reaching Estelle before it's too late to save [l_name]."
-    G "It is far too risky!"
-    S "To save my love, no risk is too great."
-    G "If you say so, [miperson]. All the same, be on your guard."
+    if RB_1A_seen == False:
+        G "Are you prepared to see ROBBIT, [miperson]? He seems rather... unstable, to put it kindly."
+        S "Gaius, you worry too much. He is in great need of our help. If we assist him, we have a chance of securing safe passage through his terrority and reaching Estelle before it's too late to save [l_name]."
+        G "It is far too risky!"
+        S "To save my love, no risk is too great."
+        G "If you say so, [miperson]. All the same, be on your guard."
+        $RB_1A_seen = True
     G "Ah, ROBBIT approaches."
     show RB neutral at right
     RB "I had hopped to see you all again. Have you had any luck in tracking down my missing parts? It's not easy being half-blind and green."
@@ -194,10 +198,12 @@ label RB_1A_Failure:
     return
     
 label RB_TimeLimitWar:
-    ##TODO call this:
     scene bg b_cc
     show RB angry at right
-    RB "It has been a while since I've heard from those vistors from Dreamion. I can't just wart around. They could be plotting something... I mustn't be caught off guard by croak and dagger."
+    if RB_first == True:
+        RB "It has been a while since I've heard from those vistors from Dreamion. I can't just wart around. They could be plotting something... I mustn't be caught off guard by croak and dagger."
+    else:
+        RB "I've received word that Dreamion is amassing an army. I can't just wart around. They could be plotting to attack the BoT... I mustn't be caught off guard by croak and dagger."
     RB "That leaves me one choice, and only one choice. I must jump into the fray and strike them down before they come for me!"
     scene black
     with Dissolve(0.5)
@@ -210,8 +216,10 @@ label RB_2A:
     show gaius neutral at Position(xpos = 95, xanchor=0, ypos=1.0, yanchor=500)
     call display_character_left pass ("neutral")
     show gaius neutral at Position(xpos = 95, xanchor=0, ypos=1.0, yanchor=500)
-    G "ROBBIT appears to be on the mend. Hopefully we can continue full steam ahead."
-    S "I have high hopes as well."
+    if RB_2A_seen == False:
+        G "ROBBIT appears to be on the mend. Hopefully we can continue full steam ahead."
+        S "I have high hopes as well."
+        $RB_2A_seen = True
     G "ROBBIT is now arriving, [miperson]."
     show RB neutral eye at right
     RB "I had hopped to see you all again. Have you made any progress in the search for my missing parts? I really miss having both of my legs..."
@@ -257,14 +265,16 @@ label RB_3A:
     scene bg b_cc
     show gaius neutral at Position(xpos = 95, xanchor=0, ypos=1.0, yanchor=500)
     call display_character_left pass ("neutral")
-    G "This errand to repair ROBBIT is draining our resources. I think it might be faster to simply fight our way to Estelle."
-    S "Gaius! What has gotten into you? ROBBIT is on the mend. At this point barely any of his screws are loose."
-    G "I know, but every time we come here your life is put on the line. That erratic frog could leap at any moment."
-    call CC_find_pendant
-    scene bg b_cc
-    show gaius neutral at Position(xpos = 95, xanchor=0, ypos=1.0, yanchor=500)
-    call display_character_left pass ("neutral")
-    G "Oh dear. Here he comes..."
+    if RB_3A_seen = False:
+        G "This errand to repair ROBBIT is draining our resources. I think it might be faster to simply fight our way to Estelle."
+        S "Gaius! What has gotten into you? ROBBIT is on the mend. At this point barely any of his screws are loose."
+        G "I know, but every time we come here your life is put on the line. That erratic frog could leap at any moment."
+        call CC_find_pendant
+        scene bg b_cc
+        show gaius neutral at Position(xpos = 95, xanchor=0, ypos=1.0, yanchor=500)
+        call display_character_left pass ("neutral")
+        $RB_3A_seen = True
+    G "Oh dear. Here ROBBIT comes again…"
     show RB neutral eye at right
     RB "Hello, my friends. I had hopped to see you all again. Have you had any luck in tracking down parts to aid me? The leg you gave me works great, but it's a bit unstable..."
     menu:
@@ -338,7 +348,7 @@ label RB_4A:
     call display_character_left pass ("neutral")
     S "ROBBIT, are you here?"
     show RB neutral eye at right
-    RB "I had hopped to see you all again. Have you found my final part? Only my brain is missing now, and I would very much like to have it back..."
+    RB "Oh, it's you, [c_name]. I had hopped to see you again. Have you found my final part? I would very much like to be complete again..."
     menu:
         "Yes, I found it!" if RB_frog_brain:
             call RB_4A_Success
@@ -433,7 +443,7 @@ label RB_4A_Item:
         S "I guess I should hold onto it. Someone might be looking for this."
     scene black
     with Dissolve(0.5)
-    centered "You got a frog brain!{p}‚Äö√Ñ¬∂gross"
+    centered "You got a frog brain!{p}‚ gross"
     $RB_frog_brain = True
     return
     

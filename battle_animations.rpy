@@ -15,5 +15,24 @@ transform beam_animation:
 
 image dreambeam:
     contains beam_animation
+    xpos 510
+    ypos 155
+
+image eyelasersright:
+    contains beam_animation
     xpos 520
-    ypos 130
+    ypos 190
+
+image eyelasersleft:
+    contains beam_animation
+    xpos 470
+    ypos 180
+    
+image robbitpunch:
+    "r_bust_angry_eye.png"
+    linear 1.0 xalign 0.4
+    repeat
+    
+transform transpa:
+
+    alpha 0.5
