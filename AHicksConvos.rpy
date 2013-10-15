@@ -157,7 +157,7 @@ label AH_lukewarm:
     AH "Alright boyo.  I ain't got a lot o' time fer the likes o' you, so let's make this quick."
     S "Now listen here. I don't mean to be-"
     AH "No, no.  I do the talking.  Either you give me [ship_count] scout ships, or we're done with negotiatin'.  I've had enough o' yer lip, so now I need yer ships."
-    G "Sir, I don't know if our fleet has the ships to spare..."
+    G "[c_title], I don't know if our fleet has the ships to spare..."
     menu:
         "Give him the ships." if ship_count < shipScoutCount:
             call AH_yes_ships

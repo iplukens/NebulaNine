@@ -37,7 +37,7 @@ label set_recruitment:
                 recruitFighterCount += x.units_per_turn.fighter
                 recruitGeneratorCount += x.units_per_turn.generator
                 recruitDGeneratorCount += x.units_per_turn.dGenerator
-                recruitEMPCount = x.units_per_turn.emp
+                recruitEMPCount += x.units_per_turn.emp
 
 
 label set_adjacents:

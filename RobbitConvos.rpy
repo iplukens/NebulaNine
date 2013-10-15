@@ -265,7 +265,7 @@ label RB_3A:
     scene bg b_cc
     show gaius neutral at Position(xpos = 95, xanchor=0, ypos=1.0, yanchor=500)
     call display_character_left pass ("neutral")
-    if RB_3A_seen = False:
+    if not RB_3A_seen:
         G "This errand to repair ROBBIT is draining our resources. I think it might be faster to simply fight our way to Estelle."
         S "Gaius! What has gotten into you? ROBBIT is on the mend. At this point barely any of his screws are loose."
         G "I know, but every time we come here your life is put on the line. That erratic frog could leap at any moment."
@@ -296,8 +296,11 @@ label RB_3A_Success:
     call display_character_left pass ("neutral")
     show RB angry eye at right
     RB "Now you've done it! With this I can take a strike at you!"
-    ### Character sliding animation should go here
-    ### Possibly make the people frown here?
+    hide RB
+    show robbitpunch
+    pause(1.0)
+    hide robbitpunch
+    show RB angry eye at right
     S "Woah! I'm lucky I'm so quick - that could've ended poorly!"
     G "I told you! This frog is nothing more than an accident waiting to happen."
     menu:

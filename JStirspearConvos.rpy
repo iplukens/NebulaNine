@@ -377,6 +377,9 @@ label JS_offer:
     return
 
 label JS_war:
+    scene bg e_cc
+    call dcl("angry")
+    show JS happy at right
     if JS_progress >= 1:
         S "I've had enough of your stalling!"
     S "We were never close, James, but going after [l_name] was the last straw. There's no chance of peace between us - not now, not ever!"
@@ -553,11 +556,11 @@ label JS_talk_three:
         JS "Because, Gaius is... he..."
         S "What, James?  What did Gaius do?"
         JS "He orchestrated the whole thing!  I wasn't going to tell you, but-"
-        S "No! That doesn't make any sense. Gaius has a loyal advisor - no, a loyal friend, since I was a child. Why would he do any of this?"
+        S "No! That doesn't make any sense. Gaius has been a loyal advisor - no, a loyal friend, since I was a child. Why would he do any of this?"
         JS "Because he knew. He and I both knew how powerful you would become. Your leadership and power in battle is unmatched."
         JS "If you'd only applied yourself in the Academy, you would have gotten top marks. Can't you see what's happening right under your nose?"
         S "You're still not making sense."
-        JS "Your [l_name], your sweet [l_name], he knew if anything happened to [l_pronoun], you would do anything to fix things - even if that meant conquering the entire nebula."
+        JS "Your [l_name], your sweet [l_name], he knew if anything happened to [l_pronoun2], you would do anything to fix things - even if that meant conquering the entire nebula."
         S "But what does he have to gain from this?"
         JS "At the last moment he meant to betray you and take the Nebula for his own, but now, well, I fear..."
         S "What James?"

@@ -281,10 +281,8 @@ screen map_image:
         text "[undeployedDGeneratorCount] / [shipDGeneratorCount]" xoffset 130 yoffset 340
         text "[undeployedEMPCount] / [shipEMPCount]" xoffset 130 yoffset 385
         text "[undeployedCommandCount] / 1" xoffset 130 yoffset 453
-        if territories[0].isAdjacent:
-            hotspot (320, 473, 61, 56) action Return(0)
         python:
-            for i in range(1, 18):
+            for i in range(0, 18):
                 star_name = "system" + str(i-1) + "_owned_" + territories[i].owner.color + ".png"
                 star_name_hover = "system" + str(i-1) + "_owned_yellow.png"
                 if territories[i].isAdjacent:

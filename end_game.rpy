@@ -175,7 +175,7 @@ label bad_ending:
     centered "-- Got the Space Serum! --"
     S "Alright, now for you..."
     call kill_gaius
-    call over
+    jump over
     
 label loved_betrayed:
     call beginning_of_the_end
@@ -219,7 +219,9 @@ label loved_betrayed:
         call hide_lcharacter("angry")
         show gaius happy at right
         G "And now it's my turn!"
+        play sound("laser.wav")
         $ double_vision_on("bg palace")
+        show gaius happy at right
         call hide_character("angry")
         S "But... but Gaius... why?"
         G "For control of the whole Nebula of course.  Now rest your eyes and go to sleep, [miperson]."
@@ -249,14 +251,13 @@ label worst_ending:
     hide eyelasersleft
     hide eyelasersright
     S "And now to save my love!"
-    call beginning_of_the_end
     call loved_betrayed
     jump over
     
 label over:
     scene bg fin
     with Dissolve(1.0)
-    centered "Thanks for playing!  You finished the game in [turn_count] cycles!  Try to beat that in more playthroughs and unlock all the endings!"
+    centered "Thanks for playing!  You finished the game in [turnCount] cycles!  Try to beat that in more playthroughs and unlock all the endings!"
     scene bg credits
     with Dissolve(0.5)
     scene bg credits

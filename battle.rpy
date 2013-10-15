@@ -100,10 +100,10 @@ label special_routine:
         show dreambeam
         play sound "longlaser.wav"
         pause(1.0)
-    if unit_queue[0].type == emp:
+    elif unit_queue[0].type == emp:
         $wipeShields()
         play sound "emp.mp3"
-    if unit_queue[0].type == generator or unit_queue[0].type == dgenerator:
+    elif unit_queue[0].type == generator or unit_queue[0].type == dgenerator:
         play sound "shield.wav"
         $up_shields()
     return

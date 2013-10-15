@@ -276,7 +276,7 @@ init python:
 
     def get_dead_defense(attacker, defendee):
         if defendee.defending:
-            dead_defense = (attacker.type.attack * attacker.count) / (defendee.type.defense * 2)
+            dead_defense = (attacker.type.attack * attacker.count) / (defendee.type.defense * 1.125)
         else:
             dead_defense = (attacker.type.attack * attacker.count) / defendee.type.defense
         if defendee.position < 3 or (defendee.position > 4 and defendee < 8):
@@ -327,6 +327,8 @@ init python:
         unit_queue[0].initiative += 40
         ship_name = "d_cc.png"
         ui.imagebutton(ship_name, ship_name, xpos=20, ypos=100)
+        global kill_count
+        kill_count += guy.count
         guy.count = 0
         
     def wipeShields():
