@@ -74,9 +74,9 @@ label advance_tutorial:
     G "Your lover was kidnapped while you slumbered."
     call dcl("angry")
     S "What?! Kipnapped?! By whom?!"
-    G "That much is not clear, but we've tracked where they've gone and are ready to give chase at a moment's notice."
-    S "Yes, let's hurry!"
-    G "No worries, [miperson]. It shouldn't be long.  They have yet to leave Dreamion."
+    G "That much remains unclear, but we've tracked where they've gone and are ready to give chase at a moment's notice."
+    S "Yes, let's hurry! It may already be too late!"
+    G "Do not depair, [miperson].  They have yet to cross Dreamion's borders."
     scene bg allocate
     with Dissolve(0.5)
     call dcl("neutral")
@@ -84,7 +84,7 @@ label advance_tutorial:
     $mBandits = Owner("e", "red", [Battalion("fighter",2),Battalion("fighter",2),Battalion("dgenerator",2),Battalion("generator",1),Battalion("None",0)], "{color=#ff0000}")
     $territory = territories[0]
     $enemy = mBandits
-    G "Alright, [miperson].  We've tracked down the rebels, and now it's time to deploy our troops to fight them."
+    G "My [c_title],  we've tracked down the rebels' location. It's time to deploy our troops."
     G "You remember how to do this, correct?"
     menu:
         "Born with the knowledge, Gaius.":
@@ -92,17 +92,17 @@ label advance_tutorial:
             call allocationRoutine
         "Not as such, no...":
             G "Fair, enough.  It's pretty simple."
-            G "First, select the type of ship you want on the right side.  Then, use the plus and minus buttons in the middle to choose a number of ships to deploy in the battalion."
-            G "Once an amount is chosen, place your designated squadron into the battle formation by clicking one of the rectangles on the right."
+            G "First, select a type of ship on the left side.  Then, use the plus and minus buttons in the middle to choose a number of ships to deploy in the battalion."
+            G "Once an amount is chosen, place your battalion in the formation by clicking one of the rectangles on the right."
             G "Remember, ships placed in the back of the formation will be safer than those placed in the front."
             G "If you have any questions about what ships do, just click the help button in the top right."
-            S "Thank you Gaius."
+            S "Thank you, Gaius."
             call allocationRoutine
     call end_game
     scene bg d_cc
     show gaius neutral at right
     call dcl("neutral")
-    G "Your love has been rescured, [miperson]!  There's just a little problem though... which was your love again?"
+    G "We have captured the cargo ship where your love was held captive! [miperson]!  There's just one, small problem... which was your love again?"
     call screen love_select
     $l_tutorial_Gender = _return
     if l_tutorial_Gender == "female":
@@ -120,15 +120,15 @@ label advance_tutorial:
     G "I understand the need for haste, [miperson], but to reach Estelle you must pass through the territories that lie between. I fear that they will not welcome Dreamion's armies willingly..."
     S "But we must try!"
     G "I agree. The troops have been assembled; they await your command. I wish you luck in your quest, for the very future of Dreamion may depend on the outcome..."
-    G "Will you require a quick introduction to functionings of your territories of Dreamion?"
+    G "Will you require a quick introduction to navigating your territories?"
     menu:
+        "Yes, please.":
+            S "Yes."
+            G "Very well."
         "No, Gaius, you've done more than enough.":
             $tutorial_map_intro = False
             S "No thank you, Gaius.  I just want to find my [l_title]."
             G "Very well, [miperson]."
-        "Yes, please.":
-            S "Yes."
-            G "Very well."
     return
 
 label a_male:

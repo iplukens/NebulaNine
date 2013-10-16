@@ -274,7 +274,7 @@ label RB_3A:
         show gaius neutral at Position(xpos = 95, xanchor=0, ypos=1.0, yanchor=500)
         call display_character_left pass ("neutral")
         $RB_3A_seen = True
-    G "Oh dear. Here ROBBIT comes again…"
+    G "Oh dear. Here ROBBIT comes again‚Ä¶"
     show RB neutral eye at right
     RB "Hello, my friends. I had hopped to see you all again. Have you had any luck in tracking down parts to aid me? The leg you gave me works great, but it's a bit unstable..."
     menu:
@@ -388,10 +388,10 @@ label RB_4A_Success:
 ### Backgrounds for all of these should probably change too, not sure yet though
 
 label RB_1A_Item:
-    scene bg b_cc
+    scene bg d_cc
     call display_character_left pass ("neutral")
     show gaius neutral at right
-    S "What is this metal disc doing here?"
+    S "What is this metal disc?"
     G "It looks like some kind of eye. What could that be doing here?"
     S "I'm not sure. Let's hold onto it, just to be safe."
     $RB_eye = True
@@ -417,7 +417,7 @@ label RB_2A_Item:
     return
 
 label RB_3A_Item:
-    scene bg b_cc
+    scene bg d_cc
     call display_character_left pass ("neutral")
     show gaius neutral at right
     S "Ouch!"
@@ -435,18 +435,18 @@ label RB_3A_Item:
     return
 
 label RB_4A_Item:
-    scene bg n_cc
+    scene bg d_cc
     call display_character_left pass ("neutral")
     S "Ick! I think I just stepped on something squishy."
     S "This looks like... a brain?"
     if RB_first:
         S "This must belong to ROBBIT!"
-        S "What is it doing in the Nebulist's star system, though? I don't think ROBBIT would have ventured here..."
+        S "What is it doing here in Dreamion, though? I don't think ROBBIT would have ventured here..."
     else:
         S "I guess I should hold onto it. Someone might be looking for this."
     scene black
     with Dissolve(0.5)
-    centered "You got a frog brain!{p}‚ gross"
+    centered "You got a frog brain!{p}Gross..."
     $RB_frog_brain = True
     return
     

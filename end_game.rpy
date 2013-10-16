@@ -13,7 +13,7 @@ label end_game:
         else:
             call worst_ending
     if territories[0].owner != mPlayer:
-        G "The capital has fallen, [miperson]!  It's all over!  I can't believe I put my faith in you."
+        G "The capital has fallen, [miperson]!  It's all over!  I can't believe I put my faith in you..."
         call game_over
     return
 
@@ -27,9 +27,9 @@ label check_defeated:
             scene bg m_cc
             call dcl("angry")
             show AH angry at right
-            S "Any last words you pathetic Loser of Space?!"
+            S "Any last words, you pathetic Loser of Space?!"
             AH "None.  Just get it over with."
-            S "Alright.  TASTE MY DREAM BEAM!!!"
+            S "In that case,  TASTE MY DREAM BEAM!!!"
             $AH_conquered = True
             play sound "longlaser.wav"
             show eyelasersleft
@@ -80,7 +80,7 @@ label check_defeated:
         if conquered_someone:
             scene black
             with Dissolve(0.5)
-            centered "--- You have succesfully conquered the [string] ---"
+            centered "You have succesfully conquered the [string]"
     return
 
 
@@ -93,18 +93,18 @@ label game_over:
     while(True):
         scene black
         with Dissolve(0.5)
-        centered "-- Either load game or start a new game --"
+        centered "Either load game or start a new game"
         
 label good_ending:
     scene bg e_cc
     show gaius neutral at right
-    S "GAIUS!  GAIUS WHERE ARE YOU!"
+    S "GAIUS!  GAIUS, WHERE ARE YOU!"
     call dcl("angry")
     S "Gaius!  Where's the Space Serum?"
     G "Eh, [miperson], calm down, I, I..."
     S "NOW GAIUS!"
     G "Here, here it is."
-    centered "-- Got the Space Serum! --"
+    centered "Obtained the Space Serum!"
     S "Alright, now for you..."
     menu:
         "Spare him.":
@@ -126,24 +126,24 @@ label kill_gaius:
     hide eyelasersleft
     hide eyelasersright
     hide gaius
-    S "Now to attend to my love."
+    S "Now, to attend to my love."
     call loved_betrayed
     
 label best_ending:
     S "Gaius..."
     G "Yes, [miperson]?"
     S "I'm going to let you live."
-    G "Really?  Thank you, [miperson].  THANK YOU!"
+    G "Really?  Thank you, [miperson], thank you!"
     G "I will be forever grateful."
     S "Say that after you've rotted in the dungeons a bit.  Friends, take him away!"
     hide gaius
     S "Now to attend to my love."
     call beginning_of_the_end
     call dcl("happy")
-    S "By making new friends actually."
-    S "The Masters of Space, the BoTs, the Nebulists... Even James Stirspear."
+    S "By making new friends, actually."
+    S "Alfred Hicks, ROBBIT, Corvida Corax... Even James Stirspear."
     S "The whole Nebula is now united."
-    L "I can't believe it.  Incredible.  Oh, [c_name]..."
+    L "I can't believe it.  You're Incredible!  Oh, [c_name]..."
     S "My love..."
     call over
     
@@ -156,7 +156,7 @@ label beginning_of_the_end:
     call dcl("neutral")
     call dll("neutral")
     L "[c_name], I... What's going on?  Where am I?  What happened?"
-    S "It's okay, my love.  You had Space Pox, but you're fine now.  I got you the Space Serum."
+    S "Don't worry, my love, everything's going to be fine.  You had Space Pox, but you're healed now.  I found the Space Serum for you."
     L "Space Serum?  Space Pox?"
     L "That's on the whole other side of the Nebula!"
     S "And it was a long journey to get there, but for you... anything for you..."
@@ -166,14 +166,14 @@ label beginning_of_the_end:
 label bad_ending:
     scene bg e_cc
     show gaius neutral at right
-    S "GAIUS?!  GAIUS WHERE ARE YOU?!"
+    S "GAIUS?!  GAIUS, WHERE ARE YOU?!"
     call dcl("angry")
     S "Gaius!  Where's the Space Serum?"
-    G "Eh, [miperson], calm down, I, I..."
+    G "Well, you see, [miperson], calm down - I, I..."
     S "NOW GAIUS!"
     G "Here, here it is."
-    centered "-- Got the Space Serum! --"
-    S "Alright, now for you..."
+    centered "Obtained the Space Serum!"
+    S "And now, to deal with you..."
     call kill_gaius
     jump over
     
@@ -186,21 +186,21 @@ label loved_betrayed:
     if mAH.atWar:
         S "I took down those idiot ruffians the Masters of Space without a care."
     if mCC.atWar:
-        S "I tarred and feathered those cuckoo relgious fanatics the Nebulists."
+        S "I tarred and feathered those cuckoo religious fanatics the Nebulists."
     if mRB.atWar:
-        S "I short circuited those robotic BoTs freaks."
+        S "I short circuited the robotic BoTs freaks."
     if mJS.atWar:
         S "And I even took down my old nemesis James Stirspear and his stuffed up Estelle."
     else:
         S "And I even took out the treacherous Gaius!"
         L "Gaius was a traitor!?"
-        S "Yes, but no matter.  He couldn't stand up to my DREAM BEAM either!"
+        S "Yes, but no matter.  Even he couldn't stand up to the power of my DREAM BEAM!"
     L "You... you're a monster!"
     call dll("angry")
     call dcl("neutral")
     S "What?"
-    L "You conquered and killed across the entirety of Nebula Nine?!  Think of the millions you've killed!"
-    S "It was actually [kill_count], but it was all for you!"
+    L "You slaughtered your way across the entirety of Nebula Nine?!  Think of the millions you've killed!"
+    S "It was actually [kill_count], and it was all for you, [l_name]!"
     L "For me?!?!"
     L "What makes you think I could ever love such a terrible, horrid creature!"
     call dcl("angry")
@@ -208,7 +208,7 @@ label loved_betrayed:
     L "NO! You're a monster!"
     S "TAKE IT BACK!"
     L "NO!"
-    S "Then... TASTE MY DREAM BEAM!  RRRRRRAAAAGGGGGHHHHHHH!!!!"
+    S "Then... TASTE MY DREAM BEAM!! RRRRRRAAAAGGGGGHHHHHHH!!!!"
     play sound "longlaser.wav"
     show eyelasersleft
     show eyelasersright
@@ -218,19 +218,19 @@ label loved_betrayed:
     if worstest:
         call hide_lcharacter("angry")
         show gaius happy at right
-        G "And now it's my turn!"
-        play sound("laser.wav")
+        G "And now, it's my turn to rule!"
+        play sound('laser.wav')
         $ double_vision_on("bg palace")
-        show gaius happy at right
+        show gaius happy
         call hide_character("angry")
-        S "But... but Gaius... why?"
-        G "For control of the whole Nebula of course.  Now rest your eyes and go to sleep, [miperson]."
+        S "But... Gaius... why?"
+        G "For control of the Nebula, of course.  Now, [miperson], rest your eyes and sleep."
         S "Yes, Gaius... Dreams... I will Dreamion forver..."
-        G "No, [miperson].  No more dreams for you.  Only nightmares."
+        G "No, [c_name].  No more dreams for you.  Only nightmares."
         $double_vision_off()
     scene bg fin
     with fade
-    centered "--- No more dreams now - only nightmares ---"
+    centered "No more dreams now - only nightmares…"
     pause(5.0)
     call over
     
@@ -242,7 +242,7 @@ label worst_ending:
     call dcl("angry")
     S "JAMES!  Where's the Space Serum?"
     JS "Calm down, [c_name].  Here it is."
-    centered "-- Got the Space Serum! --"
+    centered "Obtained the Space Serum!"
     S "Alright, now for you..."
     play sound "longlaser.wav"
     show eyelasersleft
@@ -250,6 +250,7 @@ label worst_ending:
     pause(1.0)
     hide eyelasersleft
     hide eyelasersright
+    hide JS
     S "And now to save my love!"
     call loved_betrayed
     jump over

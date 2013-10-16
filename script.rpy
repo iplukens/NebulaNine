@@ -479,7 +479,7 @@ label cpuActions:
     
 label add_stars:
     python:
-        for i in range(1, 18):
+        for i in range(0, 18):
             star_name = "system" + str(i-1) + "_owned_" + territories[i].owner.color + ".png"
             star_name_hover = "system" + str(i-1) + "_owned_yellow.png"
             ui.imagebutton(star_name, star_name_hover, xpos=territories[i].x0, ypos=territories[i].y0)

@@ -50,7 +50,6 @@ label territory_upgrade(territory):
     return
 
 screen territory_menu:
-    add "space_nebula_ground.png" xalign 0 yalign 0
     if territory.upgraded:
         add "production_per_turn.png" at Position(xpos=0, xanchor=0, ypos=120, yanchor=0)
         text "[territory.units_per_turn.untrained]" xpos 42 ypos 240

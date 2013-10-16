@@ -157,7 +157,7 @@ label AH_lukewarm:
     AH "Alright boyo.  I ain't got a lot o' time fer the likes o' you, so let's make this quick."
     S "Now listen here. I don't mean to be-"
     AH "No, no.  I do the talking.  Either you give me [ship_count] scout ships, or we're done with negotiatin'.  I've had enough o' yer lip, so now I need yer ships."
-    G "[c_title], I don't know if our fleet has the ships to spare..."
+    G "Sir, I don't know if our fleet has the ships to spare..."
     menu:
         "Give him the ships." if ship_count < shipScoutCount:
             call AH_yes_ships
@@ -469,7 +469,7 @@ label AH_rMcCoy:
     S "We go to war."
     scene black
     with Dissolve(0.5)
-    centered "---You are now at war with the Masters of Space!---"
+    centered "You are now at war with the Masters of Space!"
     $mAH.toWar()
     return
     
@@ -488,7 +488,7 @@ label AH_refusal:
     S "We'll have to see..."
     scene black
     with Dissolve(0.5)
-    centered "---End Diplomacy - your relationship with the Masters of Space has decreased!---"
+    centered "Your relationship with the Masters of Space has decreased..."
     $AH_relationship -= 1
     return
     

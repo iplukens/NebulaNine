@@ -21,12 +21,12 @@ image dreambeam:
 image eyelasersright:
     contains beam_animation
     xpos 520
-    ypos 190
+    ypos 210
 
 image eyelasersleft:
     contains beam_animation
     xpos 470
-    ypos 180
+    ypos 210
     
 image robbitpunch:
     "r_bust_angry_eye.png"

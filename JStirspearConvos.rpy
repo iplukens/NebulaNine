@@ -149,7 +149,7 @@ label JS_rude_2:
     $ JS_relationship -= 1
     S "Old grudges?  How about new felonies?"
     JS "Excuse me, [c_name]?"
-    S "You poisoned [l_name]!  I know you did!  They were Estellian ships that took her away!"
+    S "You poisoned [l_name]!  I know you did! It was a fleet of Estellian ships that took her away!"
     JS "You know, that really hurts. I thought you would have grown up a bit since our school days, but you're just as hot-headed as ever."
     S "And you're just as treacherous and heartless!"
     JS "Look, you're clearly trying to pick a fight, and I know I can't dissuade you from something once you've set your mind to it."
@@ -260,7 +260,7 @@ label JS_suspicious:
     JS "I know what you're trying to imply, and I'm quite insulted."
     JS "If I were trying to assassinate your darling [l_title], I would have been a good deal subtler. Despite what you may think, it is not my usual practice to go around starting quarrels."
     S "That's not how I remember it. You were always tormenting me in school."
-    JS "\"Tormenting\" is such a strong word. I like to think of it as‚ \"building character.\""
+    JS "\"Tormenting\" is such a strong word. I like to think of it as‚Äö√Ñ√∂ \"building character.\""
     S "You switched my cocoa with space goose poo. Twice!"
     JS "We were kids! And come on, in hindsight, don't you think it was rather amusing?"
     S "For you and your group of friends, maybe. Pranks like that made my life miserable!"
@@ -582,21 +582,22 @@ label JS_talk_three:
         S "How so?"
         JS "Don't mind me. Anyhow, it's time for me to bid you farewell, [c_name]. I don't think you'll be seeing me again."
         S "Are you trying to make a joke?"
-        JS "No, it was nothing; you'll see for yourself, soon enough."
+        JS "You'll see for yourself, soon enough."
     $RBWarSeen = True
     $gaius_conquer()
     scene black
     with Dissolve(0.5)
     show gaius angry
-    G "Muhahahahahaha, the Nebula will tremble under my mighty fist!"
+    G "Muhahahahahaha! The Nebula will tremble beneath my mighty fist!"
     hide Gaius
-    centered "- Gaius has conquered the Nebula! -"
+    centered "Gaius has conquered the Nebula!"
     return
 
 label JS_timeout_war:
     scene bg e_cc
     show JS happy
-    JS "Sorry, [c_name], but I don't think I'm going to sit here while you try you best to figure out how to defeat me.  No one has that kind of time."
+    JS "Sorry, [c_name], but I don't think I can afford to sit here while you try to figure out how to defeat me.  No one has that kind of time."
     scene black
     with Dissolve(0.5)
-    centered "--- You are now at war with Estelle ---"
+    centered "You are now at war with Estelle"
+    return
